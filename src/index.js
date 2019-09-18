@@ -1,22 +1,21 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import TreeNode from './TreeNode'
 
 import styles from './styles.css'
 
 export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
-  }
-
   render() {
-    const {
-      text
-    } = this.props
-
     return (
-      <div className={styles.test}>
-        Example Component: {text}
+      <div>
+        <TreeNode
+          title={'title'}
+          icon={<span>(i)</span>}
+          childNodes={[{title: '_title'}]}
+          onExpand={() => console.log('expand')}
+          onCollapse={() => console.log('collapse')}
+          isExpanded={true}
+        />
       </div>
-    )
+    );
   }
 }
