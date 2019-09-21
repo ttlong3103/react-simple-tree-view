@@ -7,15 +7,18 @@ const TreeNode = (props) => {
   const hasChildren = childNodes && childNodes.length > 0;
   return (
     <div className="treenode-container">
-      {hasChildren && (
-        <span onClick={isExpanded ? onCollapse : onExpand}>v</span>
-      )}
+      {hasChildren &&
+        (isExpanded ? (
+          <span onClick={onCollapse}>v</span>
+        ) : (
+          <span onClick={onExpand}>></span>
+        ))}
       {icon}
       <span>{title}</span>
       {isExpanded && hasChildren && (
         <div>
           {childNodes.map((node) => {
-            return <TreeNode {...node} />
+            return <TreeNode {...node} />;
           })}
         </div>
       )}
