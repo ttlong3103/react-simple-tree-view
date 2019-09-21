@@ -29,3 +29,9 @@ class Example extends Component {
 ## License
 
 MIT © [ttlong3103](https://github.com/ttlong3103)
+
+## Contribute
+
+1. Clone this repository
+2. At root of repo, run `npm start`
+3. Open another command-line, cd to folder `example` of this repo. At there, run `npm start`
