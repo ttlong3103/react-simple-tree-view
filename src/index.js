@@ -14,6 +14,7 @@ export default class ExampleComponent extends Component {
           onExpand={() => console.log('expand')}
           onCollapse={() => console.log('collapse')}
           isExpanded={true}
+          onSelect={() => console.log('select')}
         />
       </div>
     );

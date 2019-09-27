@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import './TreeNode.css'
 
 const TreeNode = (props) => {
-  const { icon, title, childNodes, isExpanded, onCollapse, onExpand } = props;
+  const { icon, title, childNodes, isExpanded, onCollapse, onExpand, onSelect } = props;
   const hasChildren = childNodes && childNodes.length > 0;
   return (
     <div className="treenode-container">
@@ -14,7 +14,7 @@ const TreeNode = (props) => {
           <span onClick={onExpand}>></span>
         ))}
       {icon}
-      <span>{title}</span>
+      <span onClick={onSelect}>{title}</span>
       {isExpanded && hasChildren && (
         <div>
           {childNodes.map((node) => {
@@ -27,12 +27,13 @@ const TreeNode = (props) => {
 }
 
 TreeNode.propTypes = {
-  icon: PropTypes.object,
+  icon: PropTypes.node,
   title: PropTypes.string.isRequired,
   childNodes: PropTypes.array,
   isExpanded: PropTypes.bool,
   onExpand: PropTypes.func,
   onCollapse: PropTypes.func,
+  onSelect: PropTypes.func,
 }
 
 TreeNode.defaultProps = {
