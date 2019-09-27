@@ -1,21 +1,52 @@
-import React, { Component } from 'react'
-import TreeNode from './TreeNode'
+import React, { Component } from 'react';
+import TreeView from './TreeView';
 
-import styles from './styles.css'
+const treeData = [
+  {
+    title: 'folder1',
+    childNodes: ['readme.md', 'test.js'].map((x) => ({
+      title: x,
+    })),
+  },
+  {
+    title: 'folder2',
+    childNodes: ['a.css', 'b.js', 'c.txt'].map((x) => ({
+      title: x,
+    })),
+    isExpanded: true,
+  },
+  {
+    title: 'index.js',
+  },
+  {
+    title: 'folder3',
+    childNodes: [
+      {
+        title: 'index.js',
+      },
+      {
+        title: 'components',
+        childNodes: [
+          {
+            title: 'abc',
+          },
+          {
+            title: 'xyz',
+            isExpanded: true,
+            childNodes: ['1', '2', '3'].map((x) => ({ ttile: x })),
+          },
+        ],
+      },
+    ],
+    isExpanded: true,
+  },
+];
 
 export default class ExampleComponent extends Component {
   render() {
     return (
       <div>
-        <TreeNode
-          title={'title'}
-          icon={<span>(i)</span>}
-          childNodes={[{title: '_title'}]}
-          onExpand={() => console.log('expand')}
-          onCollapse={() => console.log('collapse')}
-          isExpanded={true}
-          onSelect={() => console.log('select')}
-        />
+        <TreeView data={treeData} />
       </div>
     );
   }
