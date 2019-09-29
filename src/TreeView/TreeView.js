@@ -14,16 +14,14 @@ class TreeView extends Component {
             <TreeNode
               key={index}
               path={path}
-              icon={icon}
-              title={title}
-              childNodes={childNodes}
-              isExpanded={isExpanded}
-              onExpand={(path) => {
-                onExpand && onExpand(path, { ...node, isExpanded: true });
+              data={{
+                icon,
+                title,
+                childNodes,
+                isExpanded,
               }}
-              onCollapse={(path) => {
-                onCollapse && onCollapse(path, { ...node, isExpanded: false });
-              }}
+              onExpand={onExpand}
+              onCollapse={onCollapse}
             />
           );
         })}

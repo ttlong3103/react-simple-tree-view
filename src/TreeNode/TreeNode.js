@@ -3,15 +3,28 @@ import PropTypes from 'prop-types'
 import './TreeNode.css'
 
 const TreeNode = (props) => {
-  const { icon, title, childNodes, isExpanded, onCollapse, onExpand, onSelect, path } = props;
+  const { data, onCollapse, onExpand, onSelect, path } = props;
+  const { icon, title, childNodes, isExpanded } = data;
   const hasChildren = childNodes && childNodes.length > 0;
   return (
     <div className="treenode-container">
       {hasChildren &&
         (isExpanded ? (
-          <span onClick={() => { onCollapse && onCollapse(path) }}>v</span>
+          <span
+            onClick={() => {
+              onCollapse && onCollapse(path, { ...data, isExpanded: false });
+            }}
+          >
+            v
+          </span>
         ) : (
-          <span onClick={() => { onExpand && onExpand(path) }}>></span>
+          <span
+            onClick={() => {
+              onExpand && onExpand(path, { ...data, isExpanded: true });
+            }}
+          >
+            >
+          </span>
         ))}
       {icon}
       <span onClick={onSelect}>{title}</span>
@@ -24,10 +37,12 @@ const TreeNode = (props) => {
               <TreeNode
                 key={index}
                 path={childPath}
-                icon={icon}
-                title={title}
-                childNodes={childNodes}
-                isExpanded={isExpanded}
+                data={{
+                  icon,
+                  title,
+                  childNodes,
+                  isExpanded,
+                }}
                 onExpand={onExpand}
                 onCollapse={onCollapse}
               />
@@ -40,10 +55,12 @@ const TreeNode = (props) => {
 }
 
 TreeNode.propTypes = {
-  icon: PropTypes.node,
-  title: PropTypes.string.isRequired,
-  childNodes: PropTypes.array,
-  isExpanded: PropTypes.bool,
+  data: PropTypes.shape({
+    icon: PropTypes.node,
+    title: PropTypes.string.isRequired,
+    childNodes: PropTypes.array,
+    isExpanded: PropTypes.bool,
+  }),
   /**
    * Callback when expand a parent node by clicking expand indicator
    * @param {Array} path - Path to this node
