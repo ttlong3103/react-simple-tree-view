@@ -16,7 +16,7 @@ const TreeNode = (props) => {
               onCollapse && onCollapse(path, { ...data, isExpanded: false });
             }}
           >
-            v
+            v&nbsp;&nbsp;
           </span>
         ) : (
           <span
@@ -24,7 +24,7 @@ const TreeNode = (props) => {
               onExpand && onExpand(path, { ...data, isExpanded: true });
             }}
           >
-            >
+            >&nbsp;&nbsp;
           </span>
         ))}
       {icon}
@@ -37,7 +37,7 @@ const TreeNode = (props) => {
         {title}
       </span>
       {isExpanded && hasChildren && (
-        <div>
+        <div style={{ marginLeft: '15px' }}>
           {childNodes.map((node, index) => {
             const childPath = path.concat(index);
             return (
