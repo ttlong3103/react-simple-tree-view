@@ -7,10 +7,13 @@ class TreeView extends Component {
     const { data } = this.props;
     return (
       <div>
-        {data.map((node) => {
+        {data.map((node, index) => {
           const { icon, title, childNodes, isExpanded } = node;
+          const path = [index];
           return (
             <TreeNode
+              key={index}
+              path={path}
               icon={icon}
               title={title}
               childNodes={childNodes}
