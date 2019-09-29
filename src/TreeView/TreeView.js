@@ -4,7 +4,7 @@ import TreeNode from '../TreeNode';
 
 class TreeView extends Component {
   render() {
-    const { data } = this.props;
+    const { data, onExpand } = this.props;
     return (
       <div>
         {data.map((node, index) => {
@@ -18,6 +18,9 @@ class TreeView extends Component {
               title={title}
               childNodes={childNodes}
               isExpanded={isExpanded}
+              onExpand={(path) => {
+                onExpand && onExpand(path, { ...node, isExpanded: true });
+              }}
             />
           );
         })}

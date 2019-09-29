@@ -4,7 +4,6 @@ import './TreeNode.css'
 
 const TreeNode = (props) => {
   const { icon, title, childNodes, isExpanded, onCollapse, onExpand, onSelect, path } = props;
-  console.log('path', path)
   const hasChildren = childNodes && childNodes.length > 0;
   return (
     <div className="treenode-container">
@@ -12,7 +11,7 @@ const TreeNode = (props) => {
         (isExpanded ? (
           <span onClick={onCollapse}>v</span>
         ) : (
-          <span onClick={onExpand}>></span>
+          <span onClick={() => onExpand(path)}>></span>
         ))}
       {icon}
       <span onClick={onSelect}>{title}</span>
@@ -43,6 +42,10 @@ TreeNode.propTypes = {
   title: PropTypes.string.isRequired,
   childNodes: PropTypes.array,
   isExpanded: PropTypes.bool,
+  /**
+   * Callback when collapse a parent node by clicking expand indicator
+   * @param {Array} path - Path to this node
+   */
   onExpand: PropTypes.func,
   onCollapse: PropTypes.func,
   onSelect: PropTypes.func,
