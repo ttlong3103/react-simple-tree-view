@@ -42,7 +42,6 @@ TreeView.propTypes = {
   /**
    * Callback when select a tree node
    * @param {Array} path - Path to selected node
-   * E.g: [0, 3, 0] denotes data[0][3][0]
    * @param {Object} node - Data of selected node
    */
   onSelect: PropTypes.func,
@@ -50,12 +49,14 @@ TreeView.propTypes = {
    * Callback when expand a parent node by clicking expand indicator
    * @param {Array} path - Path to this node
    * @param {Object} node - Data of this node
+   * @param {Object} tree - Data of current tree
    */
   onExpand: PropTypes.func,
   /**
    * Callback when collapse a parent node by clicking collapse indicator
    * @param {Array} path - Path to this node
    * @param {Object} node - Data of this node
+   * @param {Object} tree - Data of current tree
    */
   onCollapse: PropTypes.func,
 };
