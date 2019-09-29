@@ -43,11 +43,39 @@ const treeData = [
   },
 ];
 
+function getNode(root, path) {
+  let result = root;
+  for(let i = 0; i < path.length; i++) {
+    const index = path[i];
+    result[index];
+  }
+  return result;
+}
+function setNode(root, path, data) {
+  let node = root;
+  for(let i = 0; i < path.length - 1; i++) {
+    const index = path[i];
+    node[index];
+  }
+  node[path.length - 1] = data;
+}
+
 export default class ExampleComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      treeData
+    }
+  }
+
+  _onExpandNode = (path, nodeData) => {
+    setNode(this.state.treeData, path, nodeData);
+    this.setState(this.state.treeData)
+  }
   render() {
     return (
       <div>
-        <TreeView data={treeData} />
+        <TreeView data={this.state.treeData} onExpand={this._onExpandNode} />
       </div>
     );
   }
