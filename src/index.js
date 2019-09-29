@@ -51,14 +51,6 @@ function getNode(root, path) {
   }
   return result;
 }
-function setNode(root, path, data) {
-  let node = root;
-  for (let i = 0; i < path.length - 1; i++) {
-    const index = path[i];
-    node[index];
-  }
-  node[path.length - 1] = data;
-}
 
 export default class ExampleComponent extends Component {
   constructor(props) {
@@ -68,14 +60,14 @@ export default class ExampleComponent extends Component {
     };
   }
 
-  _onExpandNode = (path, nodeData) => {
-    setNode(this.state.treeData, path, nodeData);
-    this.setState(this.state.treeData);
+  _onExpandNode = (path, nodeData, updatedTree) => {
+    this.setState({
+      treeData: updatedTree
+    })
   };
 
   _onCollapseNode = (path, nodeData) => {
-    setNode(this.state.treeData, path, nodeData);
-    this.setState(this.state.treeData);
+
   };
 
   render() {

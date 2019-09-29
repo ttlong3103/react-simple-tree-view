@@ -3,8 +3,47 @@ import PropTypes from 'prop-types';
 import TreeNode from '../TreeNode';
 
 class TreeView extends Component {
+  /**
+   * Update a node
+   * @param {Array} treeData - Provided tree data props
+   * @param {Array} path - Path to node
+   * @param {Object} nodeData - New data of node
+   * @returns {Array} Updated tree
+   */
+  _setNode = (treeData, path, nodeData) => {
+    const tempRoot = {
+      childNodes: treeData,
+    };
+    let tempNode = tempRoot;  // runner
+    let parentNode = null;  // hold parent
+
+    // traverse and build new tree
+    let i = 0;
+    for (; i < path.length - 1; i++) {
+      const index = path[i];
+      parentNode = tempNode;
+      tempNode = { ...tempNode.childNodes[index] }; // create new node
+      parentNode.childNodes[index] = tempNode;  // replace old node with newly created node
+    }
+
+    const nodeIndex = path[i];
+    tempNode.childNodes = tempNode.childNodes.map((childNode, idx) =>
+      nodeIndex === idx ? nodeData : childNode
+    );
+
+    return tempRoot.childNodes;
+  };
+
+  _onExpandNode = (path, node) => {
+    const { onExpand, data: treeData } = this.props;
+    if(onExpand) {
+      const updatedTree = this._setNode(treeData, path, node);
+      onExpand(path, node, updatedTree);
+    }
+  };
+
   render() {
-    const { data, onExpand, onCollapse } = this.props;
+    const { data, onCollapse } = this.props;
     return (
       <div>
         {data.map((node, index) => {
@@ -20,7 +59,7 @@ class TreeView extends Component {
                 childNodes,
                 isExpanded,
               }}
-              onExpand={onExpand}
+              onExpand={this._onExpandNode}
               onCollapse={onCollapse}
             />
           );
