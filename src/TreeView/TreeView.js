@@ -50,12 +50,20 @@ class TreeView extends Component {
     }
   };
 
+  _onToggleSelectNode = (path, node) => {
+    const { onToggleSelect, data: treeData } = this.props;
+    if(onToggleSelect) {
+      const updatedTree = this._setNode(treeData, path, node);
+      onToggleSelect(path, node, updatedTree);
+    }
+  }
+
   render() {
     const { data } = this.props;
     return (
       <div>
         {data.map((node, index) => {
-          const { icon, title, childNodes, isExpanded } = node;
+          const { icon, title, childNodes, isExpanded, isSelected } = node;
           const path = [index];
           return (
             <TreeNode
@@ -66,9 +74,11 @@ class TreeView extends Component {
                 title,
                 childNodes,
                 isExpanded,
+                isSelected
               }}
               onExpand={this._onExpandNode}
               onCollapse={this._onCollapseNode}
+              onToggleSelect={this._onToggleSelectNode}
             />
           );
         })}
@@ -84,14 +94,16 @@ TreeView.propTypes = {
       title: PropTypes.string.isRequired,
       childNodes: PropTypes.array,
       isExpanded: PropTypes.bool,
+      isSelected: PropTypes.bool,
     })
   ),
   /**
    * Callback when select a tree node
    * @param {Array} path - Path to selected node
    * @param {Object} node - Data of selected node
+   * @param {Object} tree - Data of current tree
    */
-  onSelect: PropTypes.func,
+  onToggleSelect: PropTypes.func,
   /**
    * Callback when expand a parent node by clicking expand indicator
    * @param {Array} path - Path to this node

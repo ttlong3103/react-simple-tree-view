@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import './TreeNode.css'
 
 const TreeNode = (props) => {
-  const { data, onCollapse, onExpand, onSelect, path } = props;
-  const { icon, title, childNodes, isExpanded } = data;
+  const { data, onCollapse, onExpand, onToggleSelect, path } = props;
+  const { icon, title, childNodes, isExpanded, isSelected } = data;
   const hasChildren = childNodes && childNodes.length > 0;
+  const styleOfSelected = isSelected ? { backgroundColor: 'yellow' } : undefined;
   return (
     <div className="treenode-container">
       {hasChildren &&
@@ -27,11 +28,18 @@ const TreeNode = (props) => {
           </span>
         ))}
       {icon}
-      <span onClick={onSelect}>{title}</span>
+      <span
+        onClick={() => {
+          onToggleSelect && onToggleSelect(path, { ...data, isSelected: !isSelected });
+        }}
+        style={styleOfSelected}
+      >
+        {title}
+      </span>
       {isExpanded && hasChildren && (
         <div>
           {childNodes.map((node, index) => {
-            const { icon, title, childNodes, isExpanded } = node;
+            const { icon, title, childNodes, isExpanded,isSelected } = node;
             const childPath = path.concat(index);
             return (
               <TreeNode
@@ -42,9 +50,11 @@ const TreeNode = (props) => {
                   title,
                   childNodes,
                   isExpanded,
+                  isSelected
                 }}
                 onExpand={onExpand}
                 onCollapse={onCollapse}
+                onToggleSelect={onToggleSelect}
               />
             );
           })}
@@ -60,6 +70,7 @@ TreeNode.propTypes = {
     title: PropTypes.string.isRequired,
     childNodes: PropTypes.array,
     isExpanded: PropTypes.bool,
+    isSelected: PropTypes.bool,
   }),
   /**
    * Callback when expand a parent node by clicking expand indicator
@@ -73,7 +84,12 @@ TreeNode.propTypes = {
    * @param {Object} node - Data of this node
    */
   onCollapse: PropTypes.func,
-  onSelect: PropTypes.func,
+  /**
+   * Callback when select a node by clicking on its title
+   * @param {Array} path - Path to this node
+   * @param {Object} node - Data of this node
+   */
+  onToggleSelect: PropTypes.func,
 }
 
 TreeNode.defaultProps = {

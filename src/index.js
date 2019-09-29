@@ -72,6 +72,12 @@ export default class ExampleComponent extends Component {
     })
   };
 
+  _onToggleSelectNode = (path, nodeData, updatedTree) => {
+    this.setState({
+      treeData: updatedTree
+    })
+  };
+
   render() {
     return (
       <div>
@@ -79,6 +85,7 @@ export default class ExampleComponent extends Component {
           data={this.state.treeData}
           onExpand={this._onExpandNode}
           onCollapse={this._onCollapseNode}
+          onToggleSelect={this._onToggleSelectNode}
         />
       </div>
     );
