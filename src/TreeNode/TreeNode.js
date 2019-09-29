@@ -9,7 +9,7 @@ const TreeNode = (props) => {
     <div className="treenode-container">
       {hasChildren &&
         (isExpanded ? (
-          <span onClick={onCollapse}>v</span>
+          <span onClick={() => onCollapse(path)}>v</span>
         ) : (
           <span onClick={() => onExpand(path)}>></span>
         ))}
@@ -43,10 +43,14 @@ TreeNode.propTypes = {
   childNodes: PropTypes.array,
   isExpanded: PropTypes.bool,
   /**
-   * Callback when collapse a parent node by clicking expand indicator
+   * Callback when expand a parent node by clicking expand indicator
    * @param {Array} path - Path to this node
    */
   onExpand: PropTypes.func,
+  /**
+   * Callback when collapse a parent node by clicking collapse indicator
+   * @param {Array} path - Path to this node
+   */
   onCollapse: PropTypes.func,
   onSelect: PropTypes.func,
 }
