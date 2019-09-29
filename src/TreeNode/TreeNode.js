@@ -9,9 +9,9 @@ const TreeNode = (props) => {
     <div className="treenode-container">
       {hasChildren &&
         (isExpanded ? (
-          <span onClick={() => onCollapse(path)}>v</span>
+          <span onClick={() => { onCollapse && onCollapse(path) }}>v</span>
         ) : (
-          <span onClick={() => onExpand(path)}>></span>
+          <span onClick={() => { onExpand && onExpand(path) }}>></span>
         ))}
       {icon}
       <span onClick={onSelect}>{title}</span>
