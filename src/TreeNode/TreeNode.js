@@ -39,19 +39,12 @@ const TreeNode = (props) => {
       {isExpanded && hasChildren && (
         <div>
           {childNodes.map((node, index) => {
-            const { icon, title, childNodes, isExpanded,isSelected } = node;
             const childPath = path.concat(index);
             return (
               <TreeNode
                 key={index}
                 path={childPath}
-                data={{
-                  icon,
-                  title,
-                  childNodes,
-                  isExpanded,
-                  isSelected
-                }}
+                data={node}
                 onExpand={onExpand}
                 onCollapse={onCollapse}
                 onToggleSelect={onToggleSelect}

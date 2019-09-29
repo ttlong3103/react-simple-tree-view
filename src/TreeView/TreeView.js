@@ -63,19 +63,12 @@ class TreeView extends Component {
     return (
       <div>
         {data.map((node, index) => {
-          const { icon, title, childNodes, isExpanded, isSelected } = node;
           const path = [index];
           return (
             <TreeNode
               key={index}
               path={path}
-              data={{
-                icon,
-                title,
-                childNodes,
-                isExpanded,
-                isSelected
-              }}
+              data={node}
               onExpand={this._onExpandNode}
               onCollapse={this._onCollapseNode}
               onToggleSelect={this._onToggleSelectNode}
