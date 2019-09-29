@@ -26,6 +26,7 @@ const treeData = [
       },
       {
         title: 'components',
+        // isExpanded: true,
         childNodes: [
           {
             title: 'abc',
@@ -33,7 +34,7 @@ const treeData = [
           {
             title: 'xyz',
             isExpanded: true,
-            childNodes: ['1', '2', '3'].map((x) => ({ ttile: x })),
+            childNodes: ['1', '2', '3'].map((x) => ({ title: x })),
           },
         ],
       },
