@@ -66,8 +66,10 @@ export default class ExampleComponent extends Component {
     })
   };
 
-  _onCollapseNode = (path, nodeData) => {
-
+  _onCollapseNode = (path, nodeData, updatedTree) => {
+    this.setState({
+      treeData: updatedTree
+    })
   };
 
   render() {

@@ -34,6 +34,14 @@ class TreeView extends Component {
     return tempRoot.childNodes;
   };
 
+  _onCollapseNode = (path, node) => {
+    const { onCollapse, data: treeData } = this.props;
+    if(onCollapse) {
+      const updatedTree = this._setNode(treeData, path, node);
+      onCollapse(path, node, updatedTree);
+    }
+  };
+
   _onExpandNode = (path, node) => {
     const { onExpand, data: treeData } = this.props;
     if(onExpand) {
@@ -43,7 +51,7 @@ class TreeView extends Component {
   };
 
   render() {
-    const { data, onCollapse } = this.props;
+    const { data } = this.props;
     return (
       <div>
         {data.map((node, index) => {
@@ -60,7 +68,7 @@ class TreeView extends Component {
                 isExpanded,
               }}
               onExpand={this._onExpandNode}
-              onCollapse={onCollapse}
+              onCollapse={this._onCollapseNode}
             />
           );
         })}
