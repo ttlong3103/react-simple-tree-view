@@ -28,6 +28,8 @@ const TreeNode = (props) => {
                 title={title}
                 childNodes={childNodes}
                 isExpanded={isExpanded}
+                onExpand={onExpand}
+                onCollapse={onCollapse}
               />
             );
           })}
