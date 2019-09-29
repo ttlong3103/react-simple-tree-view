@@ -1,12 +1,31 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import './TreeNode.css'
+import ArrowDown from '../icon/arrow-down.svg'
+import ArrowRight from '../icon/arrow-right.svg'
+import Folder from '../icon/folder.svg'
+import File from '../icon/file.svg'
+
+function ExpandIcon() {
+  return  <img src={ArrowDown} width={15} height={15} />;
+};
+function CollapseIcon () {
+  return <img src={ArrowRight} width={15} height={15} />;
+};
+function FolderIcon () {
+  return <img src={Folder} width={18} height={18} />;
+};
+function FileIcon () {
+  return <img src={File} width={15} height={15} />;
+};
 
 const TreeNode = (props) => {
   const { data, onCollapse, onExpand, onToggleSelect, path } = props;
   const { icon, title, childNodes, isExpanded, isSelected } = data;
   const hasChildren = childNodes && childNodes.length > 0;
   const styleOfSelected = isSelected ? { backgroundColor: 'yellow' } : undefined;
+  const styleOfFile ={marginLeft: '0px' , marginRight :'5px' };
+  const styleOfFolder ={marginLeft: '5px'};
   return (
     <div className="treenode-container">
       {hasChildren &&
@@ -16,7 +35,7 @@ const TreeNode = (props) => {
               onCollapse && onCollapse(path, { ...data, isExpanded: false });
             }}
           >
-            v&nbsp;&nbsp;
+            <ExpandIcon />
           </span>
         ) : (
           <span
@@ -24,9 +43,11 @@ const TreeNode = (props) => {
               onExpand && onExpand(path, { ...data, isExpanded: true });
             }}
           >
-            >&nbsp;&nbsp;
+            <CollapseIcon/>
           </span>
-        ))}
+        ))
+      }
+      {hasChildren ? (<span style={styleOfFolder}><FolderIcon/> </span>): (<span style={styleOfFile} ><FileIcon/></span>)}
       {icon}
       <span
         onClick={() => {
@@ -37,7 +58,7 @@ const TreeNode = (props) => {
         {title}
       </span>
       {isExpanded && hasChildren && (
-        <div style={{ marginLeft: '15px' }}>
+        <div style={{ marginLeft: '30px' }}>
           {childNodes.map((node, index) => {
             const childPath = path.concat(index);
             return (
