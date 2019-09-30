@@ -43,15 +43,6 @@ const treeData = [
   },
 ];
 
-function getNode(root, path) {
-  let result = root;
-  for (let i = 0; i < path.length; i++) {
-    const index = path[i];
-    result[index];
-  }
-  return result;
-}
-
 export default class ExampleComponent extends Component {
   constructor(props) {
     super(props);
@@ -60,19 +51,19 @@ export default class ExampleComponent extends Component {
     };
   }
 
-  _onExpandNode = (path, nodeData, updatedTree) => {
+  _onExpandNode = (_, updatedTree) => {
     this.setState({
       treeData: updatedTree
     })
   };
 
-  _onCollapseNode = (path, nodeData, updatedTree) => {
+  _onCollapseNode = (_, updatedTree) => {
     this.setState({
       treeData: updatedTree
     })
   };
 
-  _onToggleSelectNode = (path, nodeData, updatedTree) => {
+  _onToggleSelectNode = (_, updatedTree) => {
     this.setState({
       treeData: updatedTree
     })

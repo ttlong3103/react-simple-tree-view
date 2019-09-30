@@ -38,7 +38,7 @@ class TreeView extends Component {
     const { onCollapse, data: treeData } = this.props;
     if(onCollapse) {
       const updatedTree = this._setNode(treeData, path, node);
-      onCollapse(path, node, updatedTree);
+      onCollapse({ path, node }, updatedTree);
     }
   };
 
@@ -46,7 +46,7 @@ class TreeView extends Component {
     const { onExpand, data: treeData } = this.props;
     if(onExpand) {
       const updatedTree = this._setNode(treeData, path, node);
-      onExpand(path, node, updatedTree);
+      onExpand({ path, node }, updatedTree);
     }
   };
 
@@ -54,7 +54,7 @@ class TreeView extends Component {
     const { onToggleSelect, data: treeData } = this.props;
     if(onToggleSelect) {
       const updatedTree = this._setNode(treeData, path, node);
-      onToggleSelect(path, node, updatedTree);
+      onToggleSelect({ path, node }, updatedTree);
     }
   }
 
@@ -90,25 +90,34 @@ TreeView.propTypes = {
       isSelected: PropTypes.bool,
     })
   ),
+
   /**
    * Callback when select a tree node
-   * @param {Array} path - Path to selected node
-   * @param {Object} node - Data of selected node
-   * @param {Object} tree - Data of current tree
+   * `(fromNode, newTree) => any`
+   * @param {Object} fromNode Data of node that trigger this callback
+   * - path: Array - Path to selected node
+   * - node: Object - Data of selected node
+   * @param {Object} newTree - Updated tree
    */
   onToggleSelect: PropTypes.func,
+
   /**
    * Callback when expand a parent node by clicking expand indicator
-   * @param {Array} path - Path to this node
-   * @param {Object} node - Data of this node
-   * @param {Object} tree - Data of current tree
+   * `(fromNode, newTree) => any`
+   * @param {Object} fromNode Data of node that trigger this callback
+   * - path: Array - Path to expanded node
+   * - node: Object - Data of expanded node
+   * @param {Object} newTree - Updated tree
    */
   onExpand: PropTypes.func,
+
   /**
    * Callback when collapse a parent node by clicking collapse indicator
-   * @param {Array} path - Path to this node
-   * @param {Object} node - Data of this node
-   * @param {Object} tree - Data of current tree
+   * `(fromNode, newTree) => any`
+   * @param {Object} fromNode Data of node that trigger this callback
+   * - path: Array - Path to collapsed node
+   * - node: Object - Data of collapsed node
+   * @param {Object} newTree - Updated tree
    */
   onCollapse: PropTypes.func,
 };
