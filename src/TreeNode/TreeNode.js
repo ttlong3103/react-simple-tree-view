@@ -6,6 +6,9 @@ import ArrowRight from '../icon/arrow-right.svg'
 import Folder from '../icon/folder.svg'
 import File from '../icon/file.svg'
 
+const styleOfFile = { marginLeft: '0px', marginRight: '5px' };
+const styleOfFolder = { marginLeft: '5px' };
+
 function ExpandIcon() {
   return  <img src={ArrowDown} width={15} height={15} />;
 };
@@ -24,8 +27,6 @@ const TreeNode = (props) => {
   const { icon, title, childNodes, isExpanded, isSelected } = data;
   const hasChildren = childNodes && childNodes.length > 0;
   const styleOfSelected = isSelected ? { backgroundColor: 'yellow' } : undefined;
-  const styleOfFile ={marginLeft: '0px' , marginRight :'5px' };
-  const styleOfFolder ={marginLeft: '5px'};
   return (
     <div className="treenode-container">
       {hasChildren &&
