@@ -8,10 +8,10 @@ const styleOfFolder = { marginLeft: '5px' };
 
 
 function FolderIcon () {
-  return <img src={Folder} width={18} height={18} />;
+  return <img style={styleOfFolder} src={Folder} width={18} height={18} />;
 };
 function FileIcon () {
-  return <img src={File} width={15} height={15} />;
+  return <img style={styleOfFile} src={File} width={15} height={15} />;
 };
 
 
