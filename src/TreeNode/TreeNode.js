@@ -1,25 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import './TreeNode.css'
 import ArrowDown from '../icon/arrow-down.svg'
 import ArrowRight from '../icon/arrow-right.svg'
-import Folder from '../icon/folder.svg'
-import File from '../icon/file.svg'
-
-const styleOfFile = { marginLeft: '0px', marginRight: '5px' };
-const styleOfFolder = { marginLeft: '5px' };
+import './TreeNode.css'
 
 function ExpandIcon() {
   return  <img src={ArrowDown} width={15} height={15} />;
 };
 function CollapseIcon () {
   return <img src={ArrowRight} width={15} height={15} />;
-};
-function FolderIcon () {
-  return <img src={Folder} width={18} height={18} />;
-};
-function FileIcon () {
-  return <img src={File} width={15} height={15} />;
 };
 
 const TreeNode = (props) => {
@@ -48,7 +37,6 @@ const TreeNode = (props) => {
           </span>
         ))
       }
-      {hasChildren ? (<span style={styleOfFolder}><FolderIcon/> </span>): (<span style={styleOfFile} ><FileIcon/></span>)}
       {icon}
       <span
         onClick={() => {
