@@ -14,8 +14,8 @@ class TreeView extends Component {
     const tempRoot = {
       childNodes: treeData,
     };
-    let tempNode = tempRoot;  // runner
-    let parentNode = null;  // hold parent
+    let tempNode = tempRoot; // runner
+    let parentNode = null; // hold parent
 
     // traverse and build new tree
     let i = 0;
@@ -24,7 +24,7 @@ class TreeView extends Component {
       parentNode = tempNode;
       parentNode.childNodes = [...parentNode.childNodes]; // clone new childNodes
       tempNode = { ...parentNode.childNodes[index] }; // create new node
-      parentNode.childNodes[index] = tempNode;  // replace old node with newly created node
+      parentNode.childNodes[index] = tempNode; // replace old node with newly created node
     }
 
     const nodeIndex = path[i];
@@ -36,9 +36,26 @@ class TreeView extends Component {
   };
 
   /**
+   * Check if 2 path are identical
+   * @param {Array} path1
+   * @param {Array} path2
+   */
+  _isSamePath = (path1, path2) => {
+    if (path1.length == path2.length) {
+      for (let i = 0; i < path1.length; i++) {
+        if (path1[i] !== path2[i]) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  };
+
+  /**
    * Traverse tree and update each node with update function
    * @param {Array} treeData - Provided tree data props
-   * @param {Function} updater - Update function apply to each node
+   * @param {Function} updater - Update function apply to each node: `(current, path) => updated`
    * @returns {Array} Updated tree
    */
   _updateNodes = (treeData, updater) => {
@@ -47,24 +64,26 @@ class TreeView extends Component {
     const tempRoot = {
       childNodes: [],
     };
-    for(let i = 0; i< treeData.length; i++) {
+    for (let i = 0; i < treeData.length; i++) {
       queue.push({
         parent: tempRoot,
-        current: treeData[i]
-      })
+        current: treeData[i],
+        path: [i],
+      });
     }
     // traverse and update
-    while(queue.length > 0) {
-      const { current, parent } = queue.shift();
+    while (queue.length > 0) {
+      const { current, parent, path } = queue.shift();
       // update node
-      const updated = updater(current);
-      if(updated.childNodes) {
+      const updated = updater(current, path);
+      if (updated.childNodes) {
         // queue children
-        for(let i = 0; i < updated.childNodes.length; i++) {
+        for (let i = 0; i < updated.childNodes.length; i++) {
           queue.push({
             parent: updated,
-            current: updated.childNodes[i]
-          })
+            current: updated.childNodes[i],
+            path: path.concat([i]),
+          });
         }
         // make old children empty so that new children will be appended later
         updated.childNodes = [];
@@ -78,7 +97,7 @@ class TreeView extends Component {
 
   _onCollapseNode = (path, node) => {
     const { onCollapse, data: treeData } = this.props;
-    if(onCollapse) {
+    if (onCollapse) {
       const updatedTree = this._setNode(treeData, path, node);
       onCollapse({ path, node }, updatedTree);
     }
@@ -86,7 +105,7 @@ class TreeView extends Component {
 
   _onExpandNode = (path, node) => {
     const { onExpand, data: treeData } = this.props;
-    if(onExpand) {
+    if (onExpand) {
       const updatedTree = this._setNode(treeData, path, node);
       onExpand({ path, node }, updatedTree);
     }
@@ -94,19 +113,23 @@ class TreeView extends Component {
 
   _onToggleSelectNode = (path, node) => {
     const { onToggleSelect, data: treeData } = this.props;
-    if(onToggleSelect) {
-      const clearSelectedTree = this._updateNodes(treeData, (nodeData) => ({
-        ...nodeData,
-        isSelected: false,
-      }));
-      console.log('clear', clearSelectedTree)
-      const updatedTree = this._setNode(clearSelectedTree, path, node);
-      console.log('updated', updatedTree)
-      // console.log(node)
+    if (onToggleSelect) {
+      const updatedTree = this._updateNodes(treeData, (nodeData, nodePath) => {
+        if (this._isSamePath(path, nodePath)) {
+          return {
+            ...nodeData,
+            isSelected: node.isSelected,
+          };
+        } else {
+          return {
+            ...nodeData,
+            isSelected: false,
+          };
+        }
+      });
       onToggleSelect({ path, node }, updatedTree);
-      // onToggleSelect({ path, node }, clearSelectedTree);
     }
-  }
+  };
 
   render() {
     const { data } = this.props;
