@@ -114,20 +114,30 @@ class TreeView extends Component {
   _onToggleSelectNode = (e, path, node) => {
     const { onToggleSelect, data: treeData } = this.props;
     if (onToggleSelect) {
-      const updatedTree = this._updateNodes(treeData, (nodeData, nodePath) => {
-        if (this._isSamePath(path, nodePath)) {
-          return {
-            ...nodeData,
-            isSelected: node.isSelected,
-          };
-        } else {
-          return {
-            ...nodeData,
-            isSelected: false,
-          };
-        }
-      });
-      onToggleSelect({ path, node }, updatedTree);
+      if (e.ctrlKey) {
+        // user is pressing CTRL, this means multi-select
+        const updatedTree = this._setNode(treeData, path, node);
+        onToggleSelect({ path, node }, updatedTree);
+      } else {
+        // single select: select a node will deselect others
+        const updatedTree = this._updateNodes(
+          treeData,
+          (nodeData, nodePath) => {
+            if (this._isSamePath(path, nodePath)) {
+              return {
+                ...nodeData,
+                isSelected: node.isSelected,
+              };
+            } else {
+              return {
+                ...nodeData,
+                isSelected: false,
+              };
+            }
+          }
+        );
+        onToggleSelect({ path, node }, updatedTree);
+      }
     }
   };
 
