@@ -111,7 +111,7 @@ class TreeView extends Component {
     }
   };
 
-  _onToggleSelectNode = (path, node) => {
+  _onToggleSelectNode = (e, path, node) => {
     const { onToggleSelect, data: treeData } = this.props;
     if (onToggleSelect) {
       const updatedTree = this._updateNodes(treeData, (nodeData, nodePath) => {
