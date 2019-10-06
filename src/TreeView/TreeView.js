@@ -22,7 +22,8 @@ class TreeView extends Component {
     for (; i < path.length - 1; i++) {
       const index = path[i];
       parentNode = tempNode;
-      tempNode = { ...tempNode.childNodes[index] }; // create new node
+      parentNode.childNodes = [...parentNode.childNodes]; // clone new childNodes
+      tempNode = { ...parentNode.childNodes[index] }; // create new node
       parentNode.childNodes[index] = tempNode;  // replace old node with newly created node
     }
 
@@ -94,8 +95,16 @@ class TreeView extends Component {
   _onToggleSelectNode = (path, node) => {
     const { onToggleSelect, data: treeData } = this.props;
     if(onToggleSelect) {
-      const updatedTree = this._setNode(treeData, path, node);
+      const clearSelectedTree = this._updateNodes(treeData, (nodeData) => ({
+        ...nodeData,
+        isSelected: false,
+      }));
+      console.log('clear', clearSelectedTree)
+      const updatedTree = this._setNode(clearSelectedTree, path, node);
+      console.log('updated', updatedTree)
+      // console.log(node)
       onToggleSelect({ path, node }, updatedTree);
+      // onToggleSelect({ path, node }, clearSelectedTree);
     }
   }
 
