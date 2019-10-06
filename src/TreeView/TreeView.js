@@ -34,6 +34,47 @@ class TreeView extends Component {
     return tempRoot.childNodes;
   };
 
+  /**
+   * Traverse tree and update each node with update function
+   * @param {Array} treeData - Provided tree data props
+   * @param {Function} updater - Update function apply to each node
+   * @returns {Array} Updated tree
+   */
+  _updateNodes = (treeData, updater) => {
+    const queue = [];
+    // build queue
+    const tempRoot = {
+      childNodes: [],
+    };
+    for(let i = 0; i< treeData.length; i++) {
+      queue.push({
+        parent: tempRoot,
+        current: treeData[i]
+      })
+    }
+    // traverse and update
+    while(queue.length > 0) {
+      const { current, parent } = queue.shift();
+      // update node
+      const updated = updater(current);
+      if(updated.childNodes) {
+        // queue children
+        for(let i = 0; i < updated.childNodes.length; i++) {
+          queue.push({
+            parent: updated,
+            current: updated.childNodes[i]
+          })
+        }
+        // make old children empty so that new children will be appended later
+        updated.childNodes = [];
+      }
+      // append this updated node to its parent
+      parent.childNodes.push(updated);
+    }
+
+    return tempRoot.childNodes;
+  };
+
   _onCollapseNode = (path, node) => {
     const { onCollapse, data: treeData } = this.props;
     if(onCollapse) {
