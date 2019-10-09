@@ -39,8 +39,8 @@ const TreeNode = (props) => {
       }
       {icon}
       <span
-        onClick={() => {
-          onToggleSelect && onToggleSelect(path, { ...data, isSelected: !isSelected });
+        onClick={(e) => {
+          onToggleSelect && onToggleSelect(e, path, { ...data, isSelected: !isSelected });
         }}
         style={styleOfSelected}
       >
@@ -89,6 +89,7 @@ TreeNode.propTypes = {
   onCollapse: PropTypes.func,
   /**
    * Callback when select a node by clicking on its title
+   * @param {Object} event - Click event
    * @param {Array} path - Path to this node
    * @param {Object} node - Data of this node
    */
