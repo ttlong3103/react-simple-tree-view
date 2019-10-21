@@ -95,7 +95,7 @@ export default class ExampleComponent extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: '#e5e5e5', width: 300}}>
         <TreeView
           data={this.state.treeData}
           onExpand={this._onExpandNode}
