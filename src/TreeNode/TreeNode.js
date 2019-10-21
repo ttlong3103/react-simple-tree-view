@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import ArrowDown from '../icon/arrow-down.svg'
 import ArrowRight from '../icon/arrow-right.svg'
-import Css from './TreeNode.css'
+import css from './TreeNode.css'
 
 function ExpandIcon() {
   return  <img src={ArrowDown} width={15} height={15} />;
@@ -15,7 +15,8 @@ const TreeNode = (props) => {
   const { data, onCollapse, onExpand, onToggleSelect, path } = props;
   const { icon, title, childNodes, isExpanded, isSelected } = data;
   const hasChildren = childNodes && childNodes.length > 0;
-  const styleOfSelected = isSelected ? { backgroundColor: 'yellow' } : undefined;
+  var size = 200 + 'px'; // you can use % instead of px
+  const styleOfSelected = isSelected ? { backgroundColor: 'yellow',  width: size } : {width: size};
   return (
     <div className="treenode-container">
       {hasChildren &&
@@ -38,7 +39,7 @@ const TreeNode = (props) => {
         ))
       }
       {icon}
-      <span className= {Css["short-text"]}
+      <span className= {css["short-text"]}
         onClick={(e) => {
           onToggleSelect && onToggleSelect(e, path, { ...data, isSelected: !isSelected });
         }}
