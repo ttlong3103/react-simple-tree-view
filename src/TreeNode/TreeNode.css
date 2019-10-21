@@ -2,3 +2,10 @@
   margin-bottom: 5px;
   background-color: black;
 }
+.short-text {
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
+  width: 80%;
+}

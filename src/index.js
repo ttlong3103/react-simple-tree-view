@@ -4,7 +4,7 @@ import Folder from './icon/folder.svg'
 import File from './icon/file.svg'
 
 const styleOfFile = { marginLeft: '0px', marginRight: '5px' };
-const styleOfFolder = { marginLeft: '5px' };
+const styleOfFolder = { marginLeft: '5px', marginRight: '5px' };
 
 
 function FolderIcon () {
@@ -18,7 +18,7 @@ function FileIcon () {
 const treeData = [
   {
     icon: <FolderIcon />,
-    title: 'folder1',
+    title: 'folder1 folder1 folder1 folder1 folder1 folder1 folder1 folder1 folder1',
     childNodes: ['readme.md', 'test.js'].map((x) => ({
       icon: <FileIcon />,
       title: x,
@@ -95,7 +95,7 @@ export default class ExampleComponent extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{backgroundColor: '#e5e5e5', width: 300}}>
         <TreeView
           data={this.state.treeData}
           onExpand={this._onExpandNode}
