@@ -15,8 +15,7 @@ const TreeNode = (props) => {
   const { data, onCollapse, onExpand, onToggleSelect, path } = props;
   const { icon, title, childNodes, isExpanded, isSelected } = data;
   const hasChildren = childNodes && childNodes.length > 0;
-  var size = 200 + 'px'; // you can use % instead of px
-  const styleOfSelected = isSelected ? { backgroundColor: 'yellow',  width: size } : {width: size};
+  const styleOfSelected = isSelected ? { backgroundColor: 'yellow' } : undefined;
   return (
     <div className="treenode-container">
       {hasChildren &&
