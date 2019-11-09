@@ -193,13 +193,13 @@ class TreeView extends Component {
   };
 
   _onCollapseNode = (path, node) => {
-    const { onCollapse } = this.props;
+    const { onCollapseNode } = this.props;
 
     this.setState((state) => {
       const { internalTree } = state;
       const updatedTree = this._setNode(internalTree, path, node);
-      if (onCollapse) {
-        onCollapse({ path, node }, updatedTree.childrenNode);
+      if (onCollapseNode) {
+        onCollapseNode({ path, node }, updatedTree.childrenNode);
       }
       return {
         internalTree: updatedTree,
@@ -208,13 +208,13 @@ class TreeView extends Component {
   };
 
   _onExpandNode = (path, node) => {
-    const { onExpand } = this.props;
+    const { onExpandNode } = this.props;
 
     this.setState((state) => {
       const { internalTree } = state;
       const updatedTree = this._setNode(internalTree, path, node);
-      if (onExpand) {
-        onExpand({ path, node }, updatedTree.childrenNode);
+      if (onExpandNode) {
+        onExpandNode({ path, node }, updatedTree.childrenNode);
       }
       return {
         internalTree: updatedTree,
@@ -223,7 +223,7 @@ class TreeView extends Component {
   };
 
   _onToggleSelectNode = (e, path, node) => {
-    const { onToggleSelect } = this.props;
+    const { onClickNode } = this.props;
     const isPressingCtrlKey = e.ctrlKey;
 
     this.setState(state => {
@@ -245,8 +245,8 @@ class TreeView extends Component {
           }
         );
       }
-      if (onToggleSelect) {
-        onToggleSelect({ path, node }, updatedTree.childrenNode);
+      if (onClickNode) {
+        onClickNode(e, { path, node }, updatedTree.childrenNode);
       }
       return {
         internalTree: updatedTree
@@ -288,14 +288,15 @@ TreeView.propTypes = {
   ),
 
   /**
-   * Callback when select a tree node
-   * `(fromNode, newTree) => any`
+   * Callback when click a tree node
+   * `(e, fromNode, newTree) => any`
+   * @param {Object} e Event data
    * @param {Object} fromNode Data of node that trigger this callback
    * - path: Array - Path to selected node
    * - node: Object - Data of selected node
    * @param {Object} newTree - Updated tree
    */
-  onToggleSelect: PropTypes.func,
+  onClickNode: PropTypes.func,
 
   /**
    * Callback when expand a parent node by clicking expand indicator
@@ -305,7 +306,7 @@ TreeView.propTypes = {
    * - node: Object - Data of expanded node
    * @param {Object} newTree - Updated tree
    */
-  onExpand: PropTypes.func,
+  onExpandNode: PropTypes.func,
 
   /**
    * Callback when collapse a parent node by clicking collapse indicator
@@ -315,7 +316,7 @@ TreeView.propTypes = {
    * - node: Object - Data of collapsed node
    * @param {Object} newTree - Updated tree
    */
-  onCollapse: PropTypes.func,
+  onCollapseNode: PropTypes.func,
 };
 
 TreeView.defaultProps = {
