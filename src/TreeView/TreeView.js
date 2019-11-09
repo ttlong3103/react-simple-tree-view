@@ -193,11 +193,19 @@ class TreeView extends Component {
   };
 
   _onCollapseNode = (path, node) => {
-    const { onCollapse, data: treeData } = this.props;
-    if (onCollapse) {
-      const updatedTree = this._setNode(treeData, path, node);
-      onCollapse({ path, node }, updatedTree);
-    }
+    // const { onCollapse, data: treeData } = this.props;
+    const { onCollapse } = this.props;
+
+    this.setState((state) => {
+      const { internalTree } = state;
+      const updatedTree = this._setNode(internalTree, path, node);
+      if (onCollapse) {
+        onCollapse({ path, node }, updatedTree.childrenNode);
+      }
+      return {
+        internalTree: updatedTree,
+      };
+    });
   };
 
   _onExpandNode = (path, node) => {
