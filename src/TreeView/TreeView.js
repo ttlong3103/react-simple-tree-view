@@ -208,13 +208,13 @@ class TreeView extends Component {
   };
 
   _onExpandNode = (path, node) => {
-    const { onExpand } = this.props;
+    const { onExpandNode } = this.props;
 
     this.setState((state) => {
       const { internalTree } = state;
       const updatedTree = this._setNode(internalTree, path, node);
-      if (onExpand) {
-        onExpand({ path, node }, updatedTree.childrenNode);
+      if (onExpandNode) {
+        onExpandNode({ path, node }, updatedTree.childrenNode);
       }
       return {
         internalTree: updatedTree,
@@ -305,7 +305,7 @@ TreeView.propTypes = {
    * - node: Object - Data of expanded node
    * @param {Object} newTree - Updated tree
    */
-  onExpand: PropTypes.func,
+  onExpandNode: PropTypes.func,
 
   /**
    * Callback when collapse a parent node by clicking collapse indicator
