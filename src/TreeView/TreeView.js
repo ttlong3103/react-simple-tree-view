@@ -223,7 +223,7 @@ class TreeView extends Component {
   };
 
   _onToggleSelectNode = (e, path, node) => {
-    const { onToggleSelect } = this.props;
+    const { onClickNode } = this.props;
     const isPressingCtrlKey = e.ctrlKey;
 
     this.setState(state => {
@@ -245,8 +245,8 @@ class TreeView extends Component {
           }
         );
       }
-      if (onToggleSelect) {
-        onToggleSelect({ path, node }, updatedTree.childrenNode);
+      if (onClickNode) {
+        onClickNode(e, { path, node }, updatedTree.childrenNode);
       }
       return {
         internalTree: updatedTree
@@ -288,14 +288,14 @@ TreeView.propTypes = {
   ),
 
   /**
-   * Callback when select a tree node
+   * Callback when click a tree node
    * `(fromNode, newTree) => any`
    * @param {Object} fromNode Data of node that trigger this callback
    * - path: Array - Path to selected node
    * - node: Object - Data of selected node
    * @param {Object} newTree - Updated tree
    */
-  onToggleSelect: PropTypes.func,
+  onClickNode: PropTypes.func,
 
   /**
    * Callback when expand a parent node by clicking expand indicator

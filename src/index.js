@@ -83,7 +83,7 @@ export default class ExampleComponent extends Component {
     
   };
 
-  _onToggleSelectNode = (_, updatedTree) => {
+  _onToggleSelectNode = (e, fromNode, updatedTree) => {
     
   };
 
@@ -94,7 +94,7 @@ export default class ExampleComponent extends Component {
           initialData={this.state.treeData}
           onExpand={this._onExpandNode}
           onCollapse={this._onCollapseNode}
-          onToggleSelect={this._onToggleSelectNode}
+          onClickNode={this._onToggleSelectNode}
         />
       </div>
     );
