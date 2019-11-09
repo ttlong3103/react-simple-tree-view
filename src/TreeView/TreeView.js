@@ -11,8 +11,8 @@ class TreeView extends Component {
     super(props);
     const internalTree = this._parseToInternalTree(props.initialData);
     this.state = {
-      internalTree
-    }
+      internalTree,
+    };
   }
 
   _validateInitialData = (initialData) => {
@@ -68,7 +68,7 @@ class TreeView extends Component {
     // traverse
     while (queue.length > 0) {
       const { current, parent, path } = queue.shift();
-      const clonedCurrent = { ...current };
+      const clonedCurrent = { ...current, parent };
 
       if (clonedCurrent.childrenNode) {
         // queue children
@@ -91,34 +91,45 @@ class TreeView extends Component {
 
   /**
    * Update a node
-   * @param {Array} treeData - Provided tree data props
-   * @param {Array} path - Path to node
-   * @param {Object} nodeData - New data of node
-   * @returns {Array} Updated tree
+   * @param {Object} internalTree Tree data
+   * @param {Array} path Path to node
+   * @returns {Object} Node data
    */
-  _setNode = (treeData, path, nodeData) => {
-    const tempRoot = {
-      childrenNode: treeData,
-    };
-    let tempNode = tempRoot; // runner
-    let parentNode = null; // hold parent
+  _getNode = (internalTree, path) => {
+    let runner = internalTree; // runner
 
-    // traverse and build new tree
-    let i = 0;
-    for (; i < path.length - 1; i++) {
+    // traverse
+    for (let i = 0; i < path.length; i++) {
       const index = path[i];
-      parentNode = tempNode;
-      parentNode.childrenNode = [...parentNode.childrenNode]; // clone new childrenNode
-      tempNode = { ...parentNode.childrenNode[index] }; // create new node
-      parentNode.childrenNode[index] = tempNode; // replace old node with newly created node
+      runner = runner.childrenNode[index];
     }
 
-    const nodeIndex = path[i];
+    return runner;
+  };
+
+  /**
+   * Update a node
+   * @param {Object} internalTree Tree data
+   * @param {Array} path Path to node
+   * @param {Object} nodeData New data of node
+   * @returns {Object} Updated tree
+   */
+  _setNode = (internalTree, path, nodeData) => {
+    const updatedTree = { ...internalTree };
+    let tempNode = updatedTree; // runner
+
+    // traverse to get parent of node that need updated
+    for (let i = 0, numIter = path.length - 1, index; i < numIter; i++) {
+      index = path[i];
+      tempNode = tempNode.childrenNode[index];
+    }
+
+    const nodeIndex = path[path.length - 1]; // index of node that need to be updated
     tempNode.childrenNode = tempNode.childrenNode.map((childNode, idx) =>
-      nodeIndex === idx ? nodeData : childNode
+      nodeIndex === idx ? { ...childNode, ...nodeData } : childNode
     );
 
-    return tempRoot.childrenNode;
+    return updatedTree;
   };
 
   /**
@@ -190,11 +201,19 @@ class TreeView extends Component {
   };
 
   _onExpandNode = (path, node) => {
-    const { onExpand, data: treeData } = this.props;
-    if (onExpand) {
-      const updatedTree = this._setNode(treeData, path, node);
-      onExpand({ path, node }, updatedTree);
-    }
+    // const { onExpand, data: treeData } = this.props;
+    const { onExpand } = this.props;
+
+    this.setState((state) => {
+      const { internalTree } = state;
+      const updatedTree = this._setNode(internalTree, path, node);
+      if (onExpand) {
+        onExpand({ path, node }, updatedTree.childrenNode);
+      }
+      return {
+        internalTree: updatedTree,
+      };
+    });
   };
 
   _onToggleSelectNode = (e, path, node) => {
