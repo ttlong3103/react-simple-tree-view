@@ -80,7 +80,7 @@ export default class ExampleComponent extends Component {
   };
 
   _onCollapseNode = (_, updatedTree) => {
-    
+    console.log('3')
   };
 
   _onToggleSelectNode = (e, fromNode, updatedTree) => {
@@ -93,7 +93,7 @@ export default class ExampleComponent extends Component {
         <TreeView
           initialData={this.state.treeData}
           onExpandNode={this._onExpandNode}
-          onCollapse={this._onCollapseNode}
+          onCollapseNode={this._onCollapseNode}
           onClickNode={this._onToggleSelectNode}
         />
       </div>
