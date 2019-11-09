@@ -289,7 +289,8 @@ TreeView.propTypes = {
 
   /**
    * Callback when click a tree node
-   * `(fromNode, newTree) => any`
+   * `(e, fromNode, newTree) => any`
+   * @param {Object} e Event data
    * @param {Object} fromNode Data of node that trigger this callback
    * - path: Array - Path to selected node
    * - node: Object - Data of selected node

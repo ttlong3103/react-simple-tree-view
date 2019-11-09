@@ -75,16 +75,13 @@ export default class ExampleComponent extends Component {
     };
   }
 
-  _onExpandNode = (_, updatedTree) => {
-    console.log('2')
+  onExpandNode = (fromNode, updatedTree) => {
   };
 
-  _onCollapseNode = (_, updatedTree) => {
-    console.log('3')
+  onCollapseNode = (fromNode, updatedTree) => {
   };
 
-  _onToggleSelectNode = (e, fromNode, updatedTree) => {
-    console.log('1')
+  onClickNode = (e, fromNode, updatedTree) => {
   };
 
   render() {
@@ -92,9 +89,9 @@ export default class ExampleComponent extends Component {
       <div style={{backgroundColor: '#e5e5e5', width: 300}}>
         <TreeView
           initialData={this.state.treeData}
-          onExpandNode={this._onExpandNode}
-          onCollapseNode={this._onCollapseNode}
-          onClickNode={this._onToggleSelectNode}
+          onExpandNode={this.onExpandNode}
+          onCollapseNode={this.onCollapseNode}
+          onClickNode={this.onClickNode}
         />
       </div>
     );
