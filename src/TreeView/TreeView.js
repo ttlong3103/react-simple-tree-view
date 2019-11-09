@@ -150,46 +150,46 @@ class TreeView extends Component {
   };
 
   /**
-   * Traverse tree and update each node with update function
-   * @param {Array} treeData - Provided tree data props
-   * @param {Function} updater - Update function apply to each node: `(current, path) => updated`
-   * @returns {Array} Updated tree
+   * Traverse tree and invoke callback on each node
+   * @param {Array} tree Tree data
+   * @param {Function} callback function invoked on each node: `(current, path, parent) => any`
    */
-  _updateNodes = (treeData, updater) => {
+  _traverse = (tree, callback) => {
     const queue = [];
+    const invokeCallbackQueue = [];
     // build queue
-    const tempRoot = {
-      childrenNode: [],
-    };
-    for (let i = 0; i < treeData.length; i++) {
-      queue.push({
-        parent: tempRoot,
-        current: treeData[i],
-        path: [i],
-      });
-    }
-    // traverse and update
+    const tempRoot = { ...tree };
+    queue.push({
+      parent: null,
+      current: tempRoot,
+      path: [],
+    });
+    // traverse
     while (queue.length > 0) {
       const { current, parent, path } = queue.shift();
-      // update node
-      const updated = updater(current, path);
-      if (updated.childrenNode) {
+      invokeCallbackQueue.push({
+        parent,
+        current,
+        path
+      });
+      if (current.childrenNode) {
         // queue children
-        for (let i = 0; i < updated.childrenNode.length; i++) {
+        for (let i = 0; i < current.childrenNode.length; i++) {
           queue.push({
-            parent: updated,
-            current: updated.childrenNode[i],
+            parent: current,
+            current: current.childrenNode[i],
             path: path.concat([i]),
           });
         }
-        // make old children empty so that new children will be appended later
-        updated.childrenNode = [];
       }
-      // append this updated node to its parent
-      parent.childrenNode.push(updated);
     }
 
-    return tempRoot.childrenNode;
+    // invoke callback on each node
+    // we do not invoke when traverse with $queue to prevent accidentally changing value of reference
+    // the complexity will be 2n but it's worthy
+    for(let i = 0, numIter = invokeCallbackQueue.length; i < numIter; i++) {
+      callback(invokeCallbackQueue[i].current, invokeCallbackQueue[i].path, invokeCallbackQueue[i].parent);
+    }
   };
 
   _onCollapseNode = (path, node) => {
@@ -226,32 +226,34 @@ class TreeView extends Component {
 
   _onToggleSelectNode = (e, path, node) => {
     const { onToggleSelect, data: treeData } = this.props;
-    if (onToggleSelect) {
-      if (e.ctrlKey) {
+    const isPressingCtrlKey = e.ctrlKey;
+
+    this.setState(state => {
+      let updatedTree;
+      if (isPressingCtrlKey) {
         // user is pressing CTRL, this means multi-select
-        const updatedTree = this._setNode(treeData, path, node);
-        onToggleSelect({ path, node }, updatedTree);
+        updatedTree = this._setNode(state.internalTree, path, node);
       } else {
         // single select: select a node will deselect others
-        const updatedTree = this._updateNodes(
-          treeData,
+        updatedTree = { ...state.internalTree };
+        this._traverse(
+          updatedTree,
           (nodeData, nodePath) => {
             if (this._isSamePath(path, nodePath)) {
-              return {
-                ...nodeData,
-                isSelected: node.isSelected,
-              };
+              nodeData.isSelected = true
             } else {
-              return {
-                ...nodeData,
-                isSelected: false,
-              };
+              nodeData.isSelected = false
             }
           }
         );
-        onToggleSelect({ path, node }, updatedTree);
       }
-    }
+      if (onToggleSelect) {
+        onToggleSelect({ path, node }, updatedTree.childrenNode);
+      }
+      return {
+        internalTree: updatedTree
+      }
+    })
   };
 
   render() {
