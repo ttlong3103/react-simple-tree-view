@@ -98,6 +98,7 @@ export default class ExampleComponent extends Component {
       <div style={{backgroundColor: '#e5e5e5', width: 300}}>
         <TreeView
           data={this.state.treeData}
+          initialData={this.state.treeData}
           onExpand={this._onExpandNode}
           onCollapse={this._onCollapseNode}
           onToggleSelect={this._onToggleSelectNode}
