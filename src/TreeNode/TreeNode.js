@@ -13,8 +13,8 @@ function CollapseIcon () {
 
 const TreeNode = (props) => {
   const { data, onCollapse, onExpand, onToggleSelect, path } = props;
-  const { icon, title, childNodes, isExpanded, isSelected } = data;
-  const hasChildren = childNodes && childNodes.length > 0;
+  const { icon, title, childrenNode, isExpanded, isSelected } = data;
+  const hasChildren = childrenNode && childrenNode.length > 0;
   const styleOfSelected = isSelected ? { backgroundColor: 'yellow' } : undefined;
   return (
     <div className="treenode-container">
@@ -48,7 +48,7 @@ const TreeNode = (props) => {
       </span>
       {isExpanded && hasChildren && (
         <div style={{ marginLeft: '30px' }}>
-          {childNodes.map((node, index) => {
+          {childrenNode.map((node, index) => {
             const childPath = path.concat(index);
             return (
               <TreeNode
@@ -71,7 +71,7 @@ TreeNode.propTypes = {
   data: PropTypes.shape({
     icon: PropTypes.node,
     title: PropTypes.string.isRequired,
-    childNodes: PropTypes.array,
+    childrenNode: PropTypes.array,
     isExpanded: PropTypes.bool,
     isSelected: PropTypes.bool,
   }),

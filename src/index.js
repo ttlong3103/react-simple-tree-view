@@ -19,7 +19,7 @@ const treeData = [
   {
     icon: <FolderIcon />,
     title: 'folder1 folder1 folder1 folder1 folder1 folder1 folder1 folder1 folder1',
-    childNodes: ['readme.md', 'test.js'].map((x) => ({
+    childrenNode: ['readme.md', 'test.js'].map((x) => ({
       icon: <FileIcon />,
       title: x,
     })),
@@ -27,7 +27,7 @@ const treeData = [
   {
     icon: <FolderIcon />,
     title: 'folder2',
-    childNodes: ['a.css', 'b.js', 'c.txt'].map((x) => ({
+    childrenNode: ['a.css', 'b.js', 'c.txt'].map((x) => ({
       icon: <FileIcon />,
       title: x,
     })),
@@ -40,7 +40,7 @@ const treeData = [
   {
     icon: <FolderIcon />,
     title: 'folder3',
-    childNodes: [
+    childrenNode: [
       {
         icon: <FileIcon />,
         title: 'index.js',
@@ -49,7 +49,7 @@ const treeData = [
         icon: <FolderIcon />,
         title: 'components',
         // isExpanded: true,
-        childNodes: [
+        childrenNode: [
           {
             icon: <FileIcon />,
             title: 'abc',
@@ -58,7 +58,7 @@ const treeData = [
             icon: <FolderIcon />,
             title: 'xyz',
             isExpanded: true,
-            childNodes: ['1', '2', '3'].map((x) => ({ icon: <FileIcon />, title: x })),
+            childrenNode: ['1', '2', '3'].map((x) => ({ icon: <FileIcon />, title: x })),
           },
         ],
       },
@@ -76,28 +76,22 @@ export default class ExampleComponent extends Component {
   }
 
   _onExpandNode = (_, updatedTree) => {
-    this.setState({
-      treeData: updatedTree
-    })
+    
   };
 
   _onCollapseNode = (_, updatedTree) => {
-    this.setState({
-      treeData: updatedTree
-    })
+    
   };
 
   _onToggleSelectNode = (_, updatedTree) => {
-    this.setState({
-      treeData: updatedTree
-    })
+    
   };
 
   render() {
     return (
       <div style={{backgroundColor: '#e5e5e5', width: 300}}>
         <TreeView
-          data={this.state.treeData}
+          initialData={this.state.treeData}
           onExpand={this._onExpandNode}
           onCollapse={this._onCollapseNode}
           onToggleSelect={this._onToggleSelectNode}

@@ -2,37 +2,134 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TreeNode from '../TreeNode';
 
-class TreeView extends Component {
-  /**
-   * Update a node
-   * @param {Array} treeData - Provided tree data props
-   * @param {Array} path - Path to node
-   * @param {Object} nodeData - New data of node
-   * @returns {Array} Updated tree
-   */
-  _setNode = (treeData, path, nodeData) => {
-    const tempRoot = {
-      childNodes: treeData,
-    };
-    let tempNode = tempRoot; // runner
-    let parentNode = null; // hold parent
+const ERROR_UNDEFINED_VALUE = 1;
+const ERROR_NULL_VALUE = 2;
+const ERROR_TYPE_MISMATCH = 3;
 
-    // traverse and build new tree
-    let i = 0;
-    for (; i < path.length - 1; i++) {
-      const index = path[i];
-      parentNode = tempNode;
-      parentNode.childNodes = [...parentNode.childNodes]; // clone new childNodes
-      tempNode = { ...parentNode.childNodes[index] }; // create new node
-      parentNode.childNodes[index] = tempNode; // replace old node with newly created node
+class TreeView extends Component {
+  constructor(props) {
+    super(props);
+    const internalTree = this._parseToInternalTree(props.initialData);
+    this.state = {
+      internalTree,
+    };
+  }
+
+  _validateInitialData = (initialData) => {
+    const type = typeof initialData;
+    if (type == 'undefined') {
+      throw {
+        code: ERROR_UNDEFINED_VALUE,
+      };
+    }
+    if (type == null) {
+      throw {
+        code: ERROR_NULL_VALUE,
+        message: 'initial data can not be null',
+      };
+    }
+    if (type == 'number' || type == 'string' || type == 'symbol') {
+      throw {
+        code: ERROR_TYPE_MISMATCH,
+        message: `initial data can not be value of type ${type}`,
+      };
+    }
+  };
+
+  _parseToInternalTree = (initialData) => {
+    const internalTree = {
+      childrenNode: [],
+    };
+    // validate
+    try {
+      this._validateInitialData(initialData);
+    } catch ({ code, message }) {
+      switch (code) {
+        case ERROR_UNDEFINED_VALUE: {
+          initialData = [];
+          break;
+        }
+        case ERROR_NULL_VALUE:
+        case ERROR_TYPE_MISMATCH: {
+          console.error(message);
+          return internalTree;
+        }
+      }
+    }
+    // build queue
+    const queue = [];
+    for (let i = 0; i < initialData.length; i++) {
+      queue.push({
+        parent: internalTree,
+        current: initialData[i],
+        path: [i],
+      });
+    }
+    // traverse
+    while (queue.length > 0) {
+      const { current, parent, path } = queue.shift();
+      const clonedCurrent = { ...current, parent };
+
+      if (clonedCurrent.childrenNode) {
+        // queue children
+        for (let i = 0; i < clonedCurrent.childrenNode.length; i++) {
+          queue.push({
+            parent: clonedCurrent,
+            current: clonedCurrent.childrenNode[i],
+            path: path.concat([i]),
+          });
+        }
+        // reset children to empty array so that new children will be appended later
+        clonedCurrent.childrenNode = [];
+      }
+      // add cloned node
+      parent.childrenNode.push(clonedCurrent);
     }
 
-    const nodeIndex = path[i];
-    tempNode.childNodes = tempNode.childNodes.map((childNode, idx) =>
-      nodeIndex === idx ? nodeData : childNode
+    return internalTree;
+  };
+
+  /**
+   * Get a node
+   * @param {Object} tree Tree data
+   * @param {Array} path Path to node
+   * @returns {Object} Node data
+   */
+  _getNode = (tree, path) => {
+    let runner = tree; // runner
+
+    // traverse
+    for (let i = 0; i < path.length; i++) {
+      const index = path[i];
+      runner = runner.childrenNode[index];
+    }
+
+    return runner;
+  };
+
+  /**
+   * Update a node
+   * @param {Object} tree Tree data
+   * @param {Array} path Path to node
+   * @param {Object} nodeData New data of node
+   * @returns {Object} Updated tree
+   */
+  _setNode = (tree, path, nodeData) => {
+    const updatedTree = { ...tree };
+    let tempNode = updatedTree; // runner
+
+    // traverse to get parent of node that need updated
+    for (let i = 0, numIter = path.length - 1, index; i < numIter; i++) {
+      index = path[i];
+      tempNode = tempNode.childrenNode[index];
+    }
+
+    const nodeIndex = path[path.length - 1]; // index of node that need to be updated
+    tempNode.childrenNode = tempNode.childrenNode.map((childNode, idx) =>
+      nodeIndex === idx ? { ...childNode, ...nodeData } : childNode
     );
 
-    return tempRoot.childNodes;
+    return updatedTree;
   };
 
   /**
@@ -53,96 +150,112 @@ class TreeView extends Component {
   };
 
   /**
-   * Traverse tree and update each node with update function
-   * @param {Array} treeData - Provided tree data props
-   * @param {Function} updater - Update function apply to each node: `(current, path) => updated`
-   * @returns {Array} Updated tree
+   * Traverse tree and invoke callback on each node
+   * @param {Array} tree Tree data
+   * @param {Function} callback function invoked on each node: `(current, path, parent) => any`
    */
-  _updateNodes = (treeData, updater) => {
+  _traverse = (tree, callback) => {
     const queue = [];
+    const invokeCallbackQueue = [];
     // build queue
-    const tempRoot = {
-      childNodes: [],
-    };
-    for (let i = 0; i < treeData.length; i++) {
-      queue.push({
-        parent: tempRoot,
-        current: treeData[i],
-        path: [i],
-      });
-    }
-    // traverse and update
+    const tempRoot = { ...tree };
+    queue.push({
+      parent: null,
+      current: tempRoot,
+      path: [],
+    });
+    // traverse
     while (queue.length > 0) {
       const { current, parent, path } = queue.shift();
-      // update node
-      const updated = updater(current, path);
-      if (updated.childNodes) {
+      invokeCallbackQueue.push({
+        parent,
+        current,
+        path
+      });
+      if (current.childrenNode) {
         // queue children
-        for (let i = 0; i < updated.childNodes.length; i++) {
+        for (let i = 0; i < current.childrenNode.length; i++) {
           queue.push({
-            parent: updated,
-            current: updated.childNodes[i],
+            parent: current,
+            current: current.childrenNode[i],
             path: path.concat([i]),
           });
         }
-        // make old children empty so that new children will be appended later
-        updated.childNodes = [];
       }
-      // append this updated node to its parent
-      parent.childNodes.push(updated);
     }
 
-    return tempRoot.childNodes;
+    // invoke callback on each node
+    // we do not invoke when traverse with $queue to prevent accidentally changing value of reference
+    // the complexity will be 2n but it's worthy
+    for(let i = 0, numIter = invokeCallbackQueue.length; i < numIter; i++) {
+      callback(invokeCallbackQueue[i].current, invokeCallbackQueue[i].path, invokeCallbackQueue[i].parent);
+    }
   };
 
   _onCollapseNode = (path, node) => {
-    const { onCollapse, data: treeData } = this.props;
-    if (onCollapse) {
-      const updatedTree = this._setNode(treeData, path, node);
-      onCollapse({ path, node }, updatedTree);
-    }
+    const { onCollapse } = this.props;
+
+    this.setState((state) => {
+      const { internalTree } = state;
+      const updatedTree = this._setNode(internalTree, path, node);
+      if (onCollapse) {
+        onCollapse({ path, node }, updatedTree.childrenNode);
+      }
+      return {
+        internalTree: updatedTree,
+      };
+    });
   };
 
   _onExpandNode = (path, node) => {
-    const { onExpand, data: treeData } = this.props;
-    if (onExpand) {
-      const updatedTree = this._setNode(treeData, path, node);
-      onExpand({ path, node }, updatedTree);
-    }
+    const { onExpand } = this.props;
+
+    this.setState((state) => {
+      const { internalTree } = state;
+      const updatedTree = this._setNode(internalTree, path, node);
+      if (onExpand) {
+        onExpand({ path, node }, updatedTree.childrenNode);
+      }
+      return {
+        internalTree: updatedTree,
+      };
+    });
   };
 
   _onToggleSelectNode = (e, path, node) => {
-    const { onToggleSelect, data: treeData } = this.props;
-    if (onToggleSelect) {
-      if (e.ctrlKey) {
+    const { onToggleSelect } = this.props;
+    const isPressingCtrlKey = e.ctrlKey;
+
+    this.setState(state => {
+      let updatedTree;
+      if (isPressingCtrlKey) {
         // user is pressing CTRL, this means multi-select
-        const updatedTree = this._setNode(treeData, path, node);
-        onToggleSelect({ path, node }, updatedTree);
+        updatedTree = this._setNode(state.internalTree, path, node);
       } else {
         // single select: select a node will deselect others
-        const updatedTree = this._updateNodes(
-          treeData,
+        updatedTree = { ...state.internalTree };
+        this._traverse(
+          updatedTree,
           (nodeData, nodePath) => {
             if (this._isSamePath(path, nodePath)) {
-              return {
-                ...nodeData,
-                isSelected: node.isSelected,
-              };
+              nodeData.isSelected = true
             } else {
-              return {
-                ...nodeData,
-                isSelected: false,
-              };
+              nodeData.isSelected = false
             }
           }
         );
-        onToggleSelect({ path, node }, updatedTree);
       }
-    }
+      if (onToggleSelect) {
+        onToggleSelect({ path, node }, updatedTree.childrenNode);
+      }
+      return {
+        internalTree: updatedTree
+      }
+    })
   };
 
   render() {
-    const { data } = this.props;
+    const data = this.state.internalTree.childrenNode;
     return (
       <div>
         {data.map((node, index) => {
@@ -164,11 +277,11 @@ class TreeView extends Component {
 }
 
 TreeView.propTypes = {
-  data: PropTypes.arrayOf(
+  initialData: PropTypes.arrayOf(
     PropTypes.shape({
       icon: PropTypes.node,
       title: PropTypes.string.isRequired,
-      childNodes: PropTypes.array,
+      childrenNode: PropTypes.array,
       isExpanded: PropTypes.bool,
       isSelected: PropTypes.bool,
     })
@@ -206,7 +319,7 @@ TreeView.propTypes = {
 };
 
 TreeView.defaultProps = {
-  data: [],
+  initialData: [],
 };
 
 export default TreeView;
