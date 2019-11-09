@@ -76,28 +76,21 @@ export default class ExampleComponent extends Component {
   }
 
   _onExpandNode = (_, updatedTree) => {
-    this.setState({
-      treeData: updatedTree
-    })
+    
   };
 
   _onCollapseNode = (_, updatedTree) => {
-    this.setState({
-      treeData: updatedTree
-    })
+    
   };
 
   _onToggleSelectNode = (_, updatedTree) => {
-    this.setState({
-      treeData: updatedTree
-    })
+    
   };
 
   render() {
     return (
       <div style={{backgroundColor: '#e5e5e5', width: 300}}>
         <TreeView
-          data={this.state.treeData}
           initialData={this.state.treeData}
           onExpand={this._onExpandNode}
           onCollapse={this._onCollapseNode}

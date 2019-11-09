@@ -90,13 +90,13 @@ class TreeView extends Component {
   };
 
   /**
-   * Update a node
-   * @param {Object} internalTree Tree data
+   * Get a node
+   * @param {Object} tree Tree data
    * @param {Array} path Path to node
    * @returns {Object} Node data
    */
-  _getNode = (internalTree, path) => {
-    let runner = internalTree; // runner
+  _getNode = (tree, path) => {
+    let runner = tree; // runner
 
     // traverse
     for (let i = 0; i < path.length; i++) {
@@ -109,13 +109,13 @@ class TreeView extends Component {
 
   /**
    * Update a node
-   * @param {Object} internalTree Tree data
+   * @param {Object} tree Tree data
    * @param {Array} path Path to node
    * @param {Object} nodeData New data of node
    * @returns {Object} Updated tree
    */
-  _setNode = (internalTree, path, nodeData) => {
-    const updatedTree = { ...internalTree };
+  _setNode = (tree, path, nodeData) => {
+    const updatedTree = { ...tree };
     let tempNode = updatedTree; // runner
 
     // traverse to get parent of node that need updated
@@ -193,7 +193,6 @@ class TreeView extends Component {
   };
 
   _onCollapseNode = (path, node) => {
-    // const { onCollapse, data: treeData } = this.props;
     const { onCollapse } = this.props;
 
     this.setState((state) => {
@@ -209,7 +208,6 @@ class TreeView extends Component {
   };
 
   _onExpandNode = (path, node) => {
-    // const { onExpand, data: treeData } = this.props;
     const { onExpand } = this.props;
 
     this.setState((state) => {
@@ -225,7 +223,7 @@ class TreeView extends Component {
   };
 
   _onToggleSelectNode = (e, path, node) => {
-    const { onToggleSelect, data: treeData } = this.props;
+    const { onToggleSelect } = this.props;
     const isPressingCtrlKey = e.ctrlKey;
 
     this.setState(state => {
@@ -257,7 +255,6 @@ class TreeView extends Component {
   };
 
   render() {
-    // const { data } = this.props;
     const data = this.state.internalTree.childrenNode;
     return (
       <div>
@@ -281,16 +278,6 @@ class TreeView extends Component {
 
 TreeView.propTypes = {
   initialData: PropTypes.arrayOf(
-    PropTypes.shape({
-      icon: PropTypes.node,
-      title: PropTypes.string.isRequired,
-      childrenNode: PropTypes.array,
-      isExpanded: PropTypes.bool,
-      isSelected: PropTypes.bool,
-    })
-  ),
-
-  data: PropTypes.arrayOf(
     PropTypes.shape({
       icon: PropTypes.node,
       title: PropTypes.string.isRequired,
@@ -332,7 +319,6 @@ TreeView.propTypes = {
 };
 
 TreeView.defaultProps = {
-  data: [],
   initialData: [],
 };
 
