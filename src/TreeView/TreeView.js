@@ -12,7 +12,7 @@ class TreeView extends Component {
    */
   _setNode = (treeData, path, nodeData) => {
     const tempRoot = {
-      childNodes: treeData,
+      childrenNode: treeData,
     };
     let tempNode = tempRoot; // runner
     let parentNode = null; // hold parent
@@ -22,17 +22,17 @@ class TreeView extends Component {
     for (; i < path.length - 1; i++) {
       const index = path[i];
       parentNode = tempNode;
-      parentNode.childNodes = [...parentNode.childNodes]; // clone new childNodes
-      tempNode = { ...parentNode.childNodes[index] }; // create new node
-      parentNode.childNodes[index] = tempNode; // replace old node with newly created node
+      parentNode.childrenNode = [...parentNode.childrenNode]; // clone new childrenNode
+      tempNode = { ...parentNode.childrenNode[index] }; // create new node
+      parentNode.childrenNode[index] = tempNode; // replace old node with newly created node
     }
 
     const nodeIndex = path[i];
-    tempNode.childNodes = tempNode.childNodes.map((childNode, idx) =>
+    tempNode.childrenNode = tempNode.childrenNode.map((childNode, idx) =>
       nodeIndex === idx ? nodeData : childNode
     );
 
-    return tempRoot.childNodes;
+    return tempRoot.childrenNode;
   };
 
   /**
@@ -62,7 +62,7 @@ class TreeView extends Component {
     const queue = [];
     // build queue
     const tempRoot = {
-      childNodes: [],
+      childrenNode: [],
     };
     for (let i = 0; i < treeData.length; i++) {
       queue.push({
@@ -76,23 +76,23 @@ class TreeView extends Component {
       const { current, parent, path } = queue.shift();
       // update node
       const updated = updater(current, path);
-      if (updated.childNodes) {
+      if (updated.childrenNode) {
         // queue children
-        for (let i = 0; i < updated.childNodes.length; i++) {
+        for (let i = 0; i < updated.childrenNode.length; i++) {
           queue.push({
             parent: updated,
-            current: updated.childNodes[i],
+            current: updated.childrenNode[i],
             path: path.concat([i]),
           });
         }
         // make old children empty so that new children will be appended later
-        updated.childNodes = [];
+        updated.childrenNode = [];
       }
       // append this updated node to its parent
-      parent.childNodes.push(updated);
+      parent.childrenNode.push(updated);
     }
 
-    return tempRoot.childNodes;
+    return tempRoot.childrenNode;
   };
 
   _onCollapseNode = (path, node) => {
@@ -168,7 +168,7 @@ TreeView.propTypes = {
     PropTypes.shape({
       icon: PropTypes.node,
       title: PropTypes.string.isRequired,
-      childNodes: PropTypes.array,
+      childrenNode: PropTypes.array,
       isExpanded: PropTypes.bool,
       isSelected: PropTypes.bool,
     })
