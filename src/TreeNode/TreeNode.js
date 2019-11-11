@@ -20,7 +20,7 @@ const TreeNode = (props) => {
     path,
     indentChild,
   } = props;
-  const { icon, title, childrenNode, isExpanded, isSelected } = data;
+  const { icon, title, childrenNode, isExpanded, isSelected } = data
   const hasChildren = childrenNode && childrenNode.length > 0;
   const styleOfSelected = isSelected
     ? { backgroundColor: 'yellow' }
