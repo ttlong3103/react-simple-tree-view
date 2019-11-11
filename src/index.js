@@ -86,14 +86,16 @@ export default class ExampleComponent extends Component {
 
   render() {
     return (
-      <div style={{backgroundColor: '#e5e5e5', width: 300}}>
-        <TreeView
-          initialData={this.state.treeData}
-          onExpandNode={this.onExpandNode}
-          onCollapseNode={this.onCollapseNode}
-          onClickNode={this.onClickNode}
-        />
-      </div>
+      <TreeView
+        initialData={this.state.treeData}
+        onExpandNode={this.onExpandNode}
+        onCollapseNode={this.onCollapseNode}
+        onClickNode={this.onClickNode}
+        style={{
+          backgroundColor: '#e5e5e5',
+          width: 300
+        }}
+      />
     );
   }
 }

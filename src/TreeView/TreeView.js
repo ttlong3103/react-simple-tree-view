@@ -257,7 +257,7 @@ class TreeView extends Component {
   render() {
     const data = this.state.internalTree.childrenNode;
     return (
-      <div>
+      <div style={this.props.style}>
         {data.map((node, index) => {
           const path = [index];
           return (
