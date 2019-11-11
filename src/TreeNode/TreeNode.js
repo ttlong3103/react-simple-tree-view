@@ -1,21 +1,30 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import ArrowDown from '../icon/arrow-down.svg'
-import ArrowRight from '../icon/arrow-right.svg'
-import css from './TreeNode.css'
+import React from 'react';
+import PropTypes from 'prop-types';
+import ArrowDown from '../icon/arrow-down.svg';
+import ArrowRight from '../icon/arrow-right.svg';
+import css from './TreeNode.css';
 
 function ExpandIcon() {
-  return  <img src={ArrowDown} width={15} height={15} />;
-};
-function CollapseIcon () {
+  return <img src={ArrowDown} width={15} height={15} />;
+}
+function CollapseIcon() {
   return <img src={ArrowRight} width={15} height={15} />;
-};
+}
 
 const TreeNode = (props) => {
-  const { data, onCollapse, onExpand, onToggleSelect, path } = props;
+  const {
+    data,
+    onCollapse,
+    onExpand,
+    onToggleSelect,
+    path,
+    indentChild,
+  } = props;
   const { icon, title, childrenNode, isExpanded, isSelected } = data;
   const hasChildren = childrenNode && childrenNode.length > 0;
-  const styleOfSelected = isSelected ? { backgroundColor: 'yellow' } : undefined;
+  const styleOfSelected = isSelected
+    ? { backgroundColor: 'yellow' }
+    : undefined;
   return (
     <div className="treenode-container">
       {hasChildren &&
@@ -33,21 +42,22 @@ const TreeNode = (props) => {
               onExpand && onExpand(path, { ...data, isExpanded: true });
             }}
           >
-            <CollapseIcon/>
+            <CollapseIcon />
           </span>
-        ))
-      }
+        ))}
       {icon}
-      <span className= {css["short-text"]}
+      <span
+        className={css['short-text']}
         onClick={(e) => {
-          onToggleSelect && onToggleSelect(e, path, { ...data, isSelected: !isSelected });
+          onToggleSelect &&
+            onToggleSelect(e, path, { ...data, isSelected: !isSelected });
         }}
         style={styleOfSelected}
       >
         {title}
       </span>
       {isExpanded && hasChildren && (
-        <div style={{ marginLeft: '30px' }}>
+        <div style={{ marginLeft: indentChild }}>
           {childrenNode.map((node, index) => {
             const childPath = path.concat(index);
             return (
@@ -65,7 +75,7 @@ const TreeNode = (props) => {
       )}
     </div>
   );
-}
+};
 
 TreeNode.propTypes = {
   data: PropTypes.shape({
@@ -94,10 +104,11 @@ TreeNode.propTypes = {
    * @param {Object} node - Data of this node
    */
   onToggleSelect: PropTypes.func,
-}
+};
 
 TreeNode.defaultProps = {
   isExpanded: false,
-}
+  indentChild: 30,
+};
 
-export default TreeNode
+export default TreeNode;

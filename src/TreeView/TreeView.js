@@ -255,6 +255,7 @@ class TreeView extends Component {
   };
 
   render() {
+    const { indentChild } = this.props;
     const data = this.state.internalTree.childrenNode;
     return (
       <div style={this.props.style}>
@@ -268,6 +269,7 @@ class TreeView extends Component {
               onExpand={this._onExpandNode}
               onCollapse={this._onCollapseNode}
               onToggleSelect={this._onToggleSelectNode}
+              indentChild={indentChild}
             />
           );
         })}
@@ -286,6 +288,12 @@ TreeView.propTypes = {
       isSelected: PropTypes.bool,
     })
   ),
+
+  /**
+   * Indentation of children compares to its parent
+   * Default is 30
+   */
+  indentChild: PropTypes.number,
 
   /**
    * Callback when click a tree node
