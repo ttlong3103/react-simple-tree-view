@@ -27,7 +27,7 @@ const TreeNode = (props) => {
       ? { backgroundColor: 'yellow' }
       : undefined;
     return (
-      <div style={{ backgroundColor: 'red', width: '100%' }}>
+      <div key={path} style={{ width: '100%', ...styleOfSelected }}>
         <div style={{ marginLeft: indentation }}>
           {hasChildren &&
             (isExpanded ? (
@@ -55,7 +55,6 @@ const TreeNode = (props) => {
               onToggleSelect &&
                 onToggleSelect(e, path, { ...data, isSelected: !isSelected });
             }}
-            style={styleOfSelected}
           >
             {title}
           </span>
