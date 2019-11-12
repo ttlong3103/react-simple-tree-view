@@ -20,61 +20,68 @@ const TreeNode = (props) => {
     path,
     indentChild,
   } = props;
-  const { icon, title, childrenNode, isExpanded, isSelected } = data;
-  const hasChildren = childrenNode && childrenNode.length > 0;
-  const styleOfSelected = isSelected
-    ? { backgroundColor: 'yellow' }
-    : undefined;
-  return (
-    <div className="treenode-container">
-      {hasChildren &&
-        (isExpanded ? (
+  const renderRow = (data, indentation, path) => {
+    const { icon, title, childrenNode, isExpanded, isSelected } = data;
+    const hasChildren = childrenNode && childrenNode.length > 0;
+    const styleOfSelected = isSelected
+      ? { backgroundColor: 'yellow' }
+      : undefined;
+    return (
+      <div style={{ backgroundColor: 'red', width: '100%' }}>
+        <div style={{ marginLeft: indentation }}>
+          {hasChildren &&
+            (isExpanded ? (
+              <span
+                onClick={() => {
+                  onCollapse &&
+                    onCollapse(path, { ...data, isExpanded: false });
+                }}
+              >
+                <ExpandIcon />
+              </span>
+            ) : (
+              <span
+                onClick={() => {
+                  onExpand && onExpand(path, { ...data, isExpanded: true });
+                }}
+              >
+                <CollapseIcon />
+              </span>
+            ))}
+          {icon}
           <span
-            onClick={() => {
-              onCollapse && onCollapse(path, { ...data, isExpanded: false });
+            className={css['short-text']}
+            onClick={(e) => {
+              onToggleSelect &&
+                onToggleSelect(e, path, { ...data, isSelected: !isSelected });
             }}
+            style={styleOfSelected}
           >
-            <ExpandIcon />
+            {title}
           </span>
-        ) : (
-          <span
-            onClick={() => {
-              onExpand && onExpand(path, { ...data, isExpanded: true });
-            }}
-          >
-            <CollapseIcon />
-          </span>
-        ))}
-      {icon}
-      <span
-        className={css['short-text']}
-        onClick={(e) => {
-          onToggleSelect &&
-            onToggleSelect(e, path, { ...data, isSelected: !isSelected });
-        }}
-        style={styleOfSelected}
-      >
-        {title}
-      </span>
-      {isExpanded && hasChildren && (
-        <div style={{ marginLeft: indentChild }}>
-          {childrenNode.map((node, index) => {
-            const childPath = path.concat(index);
-            return (
-              <TreeNode
-                key={index}
-                path={childPath}
-                data={node}
-                onExpand={onExpand}
-                onCollapse={onCollapse}
-                onToggleSelect={onToggleSelect}
-              />
-            );
-          })}
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  };
+
+  const rows = [];
+  const queue = [{ data: data, indentation: 0, path: path }];
+  while (queue.length > 0) {
+    const { data, indentation, path } = queue.shift();
+    rows.push(renderRow(data, indentation, path));
+    const { childrenNode } = data;
+    const hasChildren = childrenNode && childrenNode.length > 0;
+    if (hasChildren) {
+      for (let i = 0, numIter = childrenNode.length; i < numIter; i++) {
+        queue.push({
+          data: childrenNode[i],
+          indentation: indentation + indentChild,
+          path: path.concat(i),
+        });
+      }
+    }
+  }
+  return <div className="treenode-container">{rows}</div>;
 };
 
 TreeNode.propTypes = {
