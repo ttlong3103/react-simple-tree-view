@@ -68,9 +68,10 @@ const TreeNode = (props) => {
   while (queue.length > 0) {
     const { data, indentation, path } = queue.shift();
     rows.push(renderRow(data, indentation, path));
-    const { childrenNode } = data;
+    const { childrenNode, isExpanded } = data;
     const hasChildren = childrenNode && childrenNode.length > 0;
-    if (hasChildren) {
+    // render children node only when parent node had been expanded
+    if (hasChildren && isExpanded) {
       for (let i = 0, numIter = childrenNode.length; i < numIter; i++) {
         queue.push({
           data: childrenNode[i],
