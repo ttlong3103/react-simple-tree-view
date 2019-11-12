@@ -19,12 +19,13 @@ const TreeNode = (props) => {
     onToggleSelect,
     path,
     indentChild,
+    selectionBackColor
   } = props;
   const renderRow = (data, indentation, path) => {
     const { icon, title, childrenNode, isExpanded, isSelected } = data;
     const hasChildren = childrenNode && childrenNode.length > 0;
     const styleOfSelected = isSelected
-      ? { backgroundColor: 'yellow' }
+      ? { backgroundColor: selectionBackColor }
       : undefined;
     return (
       <div key={path} style={{ width: '100%', ...styleOfSelected }}>
