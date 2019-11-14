@@ -255,7 +255,7 @@ class TreeView extends Component {
   };
 
   render() {
-    const { indentChild } = this.props;
+    const { indentChild, selectionBackColor } = this.props;
     const data = this.state.internalTree.childrenNode;
     return (
       <div style={this.props.style}>
@@ -270,6 +270,7 @@ class TreeView extends Component {
               onCollapse={this._onCollapseNode}
               onToggleSelect={this._onToggleSelectNode}
               indentChild={indentChild}
+              selectionBackColor={selectionBackColor}
             />
           );
         })}
@@ -294,6 +295,11 @@ TreeView.propTypes = {
    * Default is 30
    */
   indentChild: PropTypes.number,
+
+  /**
+   * Background color of selected node
+   */
+  selectionBackColor: PropTypes.string,
 
   /**
    * Callback when click a tree node
@@ -329,6 +335,7 @@ TreeView.propTypes = {
 
 TreeView.defaultProps = {
   initialData: [],
+  selectionBackColor: '#257AFD'
 };
 
 export default TreeView;
