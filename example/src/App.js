@@ -74,12 +74,12 @@ const treeData = [
 
 export default class App extends Component {
 	state = {
-		history: '',
+		history: [],
 	};
 	addHistory = (text) => {
 		this.setState((state) => {
 			return {
-				history: state.history + +'- ' + text + '\n',
+				history: state.history.concat('- ' + text),
 			};
 		});
 	};
@@ -108,7 +108,7 @@ export default class App extends Component {
 						height: '100%',
 					}}
 				/>
-				<div style={{ margin: 20 }}>{this.state.history}</div>
+				<div style={{ margin: 50 }}>{this.state.history.map(t => <div>{t}</div>)}</div>
 			</div>
 		);
 	}
