@@ -9,3 +9,6 @@
   text-overflow: ellipsis;
   width: 80%;
 }
+.treenode:hover {
+  outline: 1px solid #257AFD;
+}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TreeNode from '../TreeNode';
+import css from './TreeView.css';
 
 const ERROR_UNDEFINED_VALUE = 1;
 const ERROR_NULL_VALUE = 2;
@@ -259,21 +260,23 @@ class TreeView extends Component {
     const data = this.state.internalTree.childrenNode;
     return (
       <div style={this.props.style}>
-        {data.map((node, index) => {
-          const path = [index];
-          return (
-            <TreeNode
-              key={index}
-              path={path}
-              data={node}
-              onExpand={this._onExpandNode}
-              onCollapse={this._onCollapseNode}
-              onToggleSelect={this._onToggleSelectNode}
-              indentChild={indentChild}
-              selectionBackColor={selectionBackColor}
-            />
-          );
-        })}
+        <div className={css['treeview']}>
+          {data.map((node, index) => {
+            const path = [index];
+            return (
+              <TreeNode
+                key={index}
+                path={path}
+                data={node}
+                onExpand={this._onExpandNode}
+                onCollapse={this._onCollapseNode}
+                onToggleSelect={this._onToggleSelectNode}
+                indentChild={indentChild}
+                selectionBackColor={selectionBackColor}
+              />
+            );
+          })}
+        </div>
       </div>
     );
   }
