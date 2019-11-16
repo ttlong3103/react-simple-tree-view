@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 
 import TreeView from 'react-simple-tree-view';
+import Folder from './icon/folder.svg'
+import File from './icon/file.svg'
+
+const styleOfFile = { marginLeft: '0px', marginRight: '5px' };
+const styleOfFolder = { marginLeft: '5px', marginRight: '5px' };
+
+
+function FolderIcon () {
+  return <img style={styleOfFolder} src={Folder} width={18} height={18} />;
+};
+function FileIcon () {
+  return <img style={styleOfFile} src={File} width={15} height={15} />;
+};
 
 const treeData = [
 	{
