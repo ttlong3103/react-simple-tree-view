@@ -82,7 +82,7 @@ const TreeNode = (props) => {
       }
     }
   }
-  return <div>{rows}</div>;
+  return rows;
 };
 
 TreeNode.propTypes = {
