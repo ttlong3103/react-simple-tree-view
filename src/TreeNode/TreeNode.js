@@ -114,9 +114,4 @@ TreeNode.propTypes = {
   onToggleSelect: PropTypes.func,
 };
 
-TreeNode.defaultProps = {
-  isExpanded: false,
-  indentChild: 30,
-};
-
 export default TreeNode;
