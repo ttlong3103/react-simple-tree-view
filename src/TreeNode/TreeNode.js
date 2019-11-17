@@ -28,7 +28,7 @@ const TreeNode = (props) => {
       ? { backgroundColor: selectionBackColor }
       : undefined;
     return (
-      <div key={path} style={{ width: '100%', ...styleOfSelected }}>
+      <div className={css['treenode']} key={path} style={{ width: '100%', ...styleOfSelected }}>
         <div style={{ marginLeft: indentation }}>
           {hasChildren &&
             (isExpanded ? (
@@ -82,7 +82,7 @@ const TreeNode = (props) => {
       }
     }
   }
-  return <div className="treenode-container">{rows}</div>;
+  return rows;
 };
 
 TreeNode.propTypes = {
