@@ -338,7 +338,8 @@ TreeView.propTypes = {
 
 TreeView.defaultProps = {
   initialData: [],
-  selectionBackColor: '#257AFD'
+  selectionBackColor: '#257AFD',
+  indentChild: 30,
 };
 
 export default TreeView;

@@ -105,7 +105,7 @@ export default class App extends Component {
 					style={{
 						backgroundColor: '#e5e5e5',
 						width: 300,
-						height: '100%',
+						height: window.innerHeight,
 					}}
 				/>
 				<div style={{ margin: 50 }}>{this.state.history.map(t => <div>{t}</div>)}</div>

@@ -88,7 +88,7 @@ const TreeNode = (props) => {
 TreeNode.propTypes = {
   data: PropTypes.shape({
     icon: PropTypes.node,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     childrenNode: PropTypes.array,
     isExpanded: PropTypes.bool,
     isSelected: PropTypes.bool,
@@ -112,11 +112,6 @@ TreeNode.propTypes = {
    * @param {Object} node - Data of this node
    */
   onToggleSelect: PropTypes.func,
-};
-
-TreeNode.defaultProps = {
-  isExpanded: false,
-  indentChild: 30,
 };
 
 export default TreeNode;
