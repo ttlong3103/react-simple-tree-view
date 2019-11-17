@@ -1,5 +1,3 @@
-# react-simple-tree-view
-
 > A React tree view library
 
 [![NPM](https://img.shields.io/npm/v/react-simple-tree-view.svg)](https://www.npmjs.com/package/react-simple-tree-view) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
@@ -7,7 +5,7 @@
 ## Install
 
 ```bash
-npm install --save react-simple-tree-view
+npm install --save reactjs-treeview
 ```
 
 ## Usage
