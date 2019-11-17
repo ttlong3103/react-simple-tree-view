@@ -57,5 +57,9 @@
   },
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "react",
+    "tree"
   ]
 }
