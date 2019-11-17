@@ -88,7 +88,7 @@ const TreeNode = (props) => {
 TreeNode.propTypes = {
   data: PropTypes.shape({
     icon: PropTypes.node,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     childrenNode: PropTypes.array,
     isExpanded: PropTypes.bool,
     isSelected: PropTypes.bool,

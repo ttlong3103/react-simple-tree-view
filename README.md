@@ -16,7 +16,7 @@ npm install --save react-simple-tree-view
 
 Name | Type | Default | Description
 --- | --- | --- | ---
-initialData | Array | [] | Array of nodes to initalize tree. Each node has form:<br>{<br>&nbsp;&nbsp;icon: Component<br>&nbsp;&nbsp;title: String<br>&nbsp;&nbsp;childrenNode: Array<br>&nbsp;&nbsp;isExpanded: Boolean<br>&nbsp;&nbsp;isSelected: Boolean<br>&nbsp;&nbsp;...yourExtraData<br>}
+initialData | Array | [] | Array of nodes to initalize tree. Each node has form:<br>{<br>&nbsp;&nbsp;icon: Component<br>&nbsp;&nbsp;title: String \| Component<br>&nbsp;&nbsp;childrenNode: Array<br>&nbsp;&nbsp;isExpanded: Boolean<br>&nbsp;&nbsp;isSelected: Boolean<br>&nbsp;&nbsp;...yourExtraData<br>}
 indentChild | Number | 30 | Indentation of children node compares to its folder parent
 selectionBackColor | String | <div style="width:10px; height:10px; background-color:#257AFD"></div>#257AFD | Background color of selected node
 onClickNode | Function | | Callback when click a tree node<br>`(e, { path, node }, newTree) => any`<br>- e (Object) : Event data<br>- path (Array) : Path to node<br>- node (Object) : Data of node<br>- newTree (Object) : Updated tree
