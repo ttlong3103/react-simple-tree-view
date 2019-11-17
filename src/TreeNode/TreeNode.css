@@ -5,6 +5,12 @@
   text-overflow: ellipsis;
   width: 80%;
 }
+.none-selectable-text {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
 .treenode:hover {
   outline: 1px solid #257AFD;
 }

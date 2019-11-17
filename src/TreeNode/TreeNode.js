@@ -51,7 +51,7 @@ const TreeNode = (props) => {
             ))}
           {icon}
           <span
-            className={css['short-text']}
+            className={`${css['short-text']} ${css['none-selectable-text']}`}
             onClick={(e) => {
               onToggleSelect &&
                 onToggleSelect(e, path, { ...data, isSelected: !isSelected });
