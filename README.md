@@ -12,20 +12,6 @@ npm install --save react-simple-tree-view
 
 ## Usage
 
-```jsx
-import React, { Component } from 'react'
-
-import MyComponent from 'react-simple-tree-view'
-
-class Example extends Component {
-  render () {
-    return (
-      <MyComponent />
-    )
-  }
-}
-```
-
 ## API
 
 Name | Type | Default | Description
@@ -41,8 +27,7 @@ onCollapseNode | Function | | Callback when collapse a parent node by clicking c
 
 MIT © [ttlong3103](https://github.com/ttlong3103)
 
-## Contribute
+## Development
 
-1. Clone this repository
-2. At root of repo, run `npm start`
-3. Open another command-line, cd to folder `example` of this repo. At there, run `npm start`
+1. At root of repo, run `npm start`. This command builds code and watchs for code changes.
+2. Open another command-line, `cd` to folder `example` of this repo and run `npm start`. This will start browser with above built code.
